@@ -1,0 +1,183 @@
+[
+  {
+    "id": "tech-ai-app-engineer-knowledge-map",
+    "title": "AI 应用开发工程师知识体系与学习地图",
+    "description": "从 AI/ML 基础到 LLM 工程化, 一份给一线 AI 应用工程师的完整学习地图与知识图谱。",
+    "category": "tech",
+    "tags": [
+      "AI",
+      "LLM",
+      "工程化",
+      "学习地图"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-ai-app-engineer-knowledge-map/",
+    "excerpt": "AI 应用开发工程师知识体系与学习地图\n\n 背景\n\nAI 应用开发工程师（AI Application Engineer）这个角色介于传统后端 / 前端工程师和算法工程师之间——你不需要从零训练大模型，但要能基于 LLM 做出能在生产环境跑得动的产品。\n\n过去三年（20232026），随着 LangChain / LlamaIndex / vLLM / MCP / Agent 框架爆发，这个岗位的招聘需求和薪资天花板都在快速抬升。但知识体系是散的——算法工程师只教原理，后端工程师只教工程，没有一份从「我要入门」到「我能独立交付 AI 产品」的完整地图。\n\n这篇文章把"
+  },
+  {
+    "id": "tech-build-blog-with-astro",
+    "title": "用 Astro 搭建个人博客",
+    "description": "从零开始用 Astro 7 搭建一个支持技术笔记和生活随笔分类的博客,集成 Giscus 评论,准备部署到 Cloudflare Pages。",
+    "category": "tech",
+    "tags": [
+      "Astro",
+      "博客",
+      "静态站点"
+    ],
+    "pubDate": "2026-07-07",
+    "url": "/blog/tech-build-blog-with-astro/",
+    "excerpt": "为什么选 Astro\n\nAstro 的核心卖点是 \"默认零 JS\"——生成的页面在浏览器不跑任何 JS（除非显式加 client: 指令）。对于内容为主的博客来说，这正好契合：\n\n 加载快（首屏只有 HTML + CSS）\n SEO 友好\n 部署简单（产出纯静态文件）\n\n 核心结构\n\n\nsrc/\n  content.config.ts      内容集合定义\n  content/blog/          所有 .md 文章\n  layouts/               共享布局\n  components/            复用组件"
+  },
+  {
+    "id": "tech-rest-api-design",
+    "title": "RESTful API 设计实战: 从入门到精通",
+    "description": "做后端开发这么多年, 见过太多乱七八糟的 API 设计: 把 API 当 RPC 写, URL 塞动词, 状态码抛脑后。讲讲怎么设计一个合格的 RESTful API。",
+    "category": "tech",
+    "tags": [
+      "RESTful",
+      "API",
+      "后端",
+      "设计"
+    ],
+    "pubDate": "2026-06-25",
+    "url": "/blog/tech-rest-api-design/",
+    "excerpt": "RESTful API 设计实战：从入门到精通\n\n做后端开发这么多年，我见过太多乱七八糟的 API 设计。有人把 API 当作 RPC 来写，一个接口既查又改；有人 URL 里塞满了动词，/getUserInfo、/deleteUserById；还有人把 HTTP 状态码抛在脑后，返回 200 实际是错误。\n\n今天聊聊怎么设计一个合格的 RESTful API。\n\n 什么是 REST\n\nREST（Representational State Transfer）本质上是一套设计 Web API 的指导思想。核心就三点：\n\n1. 资源优先：URL 描述的是\"什么东"
+  },
+  {
+    "id": "life-meaning-of-life",
+    "title": "人生如何度过,才算真正精彩?",
+    "description": "深夜刷手机停下来想过吗: 现在的生活, 是我想要的吗? 不是朋友圈的\\\"精彩\\\", 是你自己觉得这辈子值了。3 个非标准答案。",
+    "category": "life",
+    "tags": [
+      "人生",
+      "思考",
+      "生活",
+      "随笔"
+    ],
+    "pubDate": "2026-06-20",
+    "url": "/blog/life-meaning-of-life/",
+    "excerpt": "人生如何度过，才算真正精彩？\n\n深夜刷手机的时候，你有没有那么一瞬间停下来想过：现在的生活，是我想要的吗？\n\n不是朋友圈里精心修饰的那种\"精彩\"，不是别人眼中的成功，而是你自己真正觉得——这辈子，值了。\n\n这个问题没有标准答案，但有些东西，踩过坑的人才知道。\n\n 01 别等\"准备好了\"才开始\n\n太多人死在等待里。\n\n想转行，说等攒够钱再说。想创业，说等市场成熟。想追那个人，说等自己变得更好。结果呢？钱没攒够，市场没成熟，自己也没变好，时间倒是等没了。\n\n人生不是做菜，没必要等所有配料都齐了才下锅。\n\n我一个朋友，35 岁那年突然想学潜水。家里人都说这个年纪了折腾什么。她没理，"
+  },
+  {
+    "id": "life-durian-evolution",
+    "title": "榴莲为什么进化成\\\"臭得要命、剥得要死\\\"的样子?",
+    "description": "走进水果店, 闻到生化武器般的味道, 但舀一勺奶油般的果肉,一切都释然了。从生物进化角度拆解榴莲的\\\"招商大会\\\"、硬壳保鲜设计和与人类的共生史。",
+    "category": "life",
+    "tags": [
+      "生物",
+      "进化",
+      "科普",
+      "榴莲"
+    ],
+    "pubDate": "2026-06-15",
+    "url": "/blog/life-durian-evolution/",
+    "excerpt": "榴莲为什么进化成\"臭得要命、剥得要死\"的样子？\n\n你有没有这样的经历——走进水果店，闻到一股\"生化武器\"般的味道，第一反应是捂住鼻子往后退。\n\n但等你剥开那颗榴莲，舀一勺奶油般的果肉放进嘴里，一切都释然了。\n\n榴莲就是这么一种神奇的存在：闻起来像厕所，吃起来像天堂。\n\n那问题来了——它为什么要进化成这副\"欠揍\"的样子？\n\n 01 榴莲的臭，是一场精心策划的\"招商大会\"\n\n很多人不知道的是：榴莲的臭味，是专门给动物\"设计\"的。\n\n榴莲的祖先在东南亚热带雨林里遇到了一个难题——我的种子太大了，怎么传播？\n\n树太高、风太弱，靠风力传播种子？行不通。靠自己掉落砸出方圆几米？也"
+  },
+  {
+    "id": "tech-meow-ai-recon",
+    "title": "喵极 AI (meow.yyr5.com) 技术架构深度分析",
+    "description": "前端代码逆向 + 公开 API 探测 + 一次真实账号实测, 完整解构 AI 表情包 SaaS 的产品/工程架构, 用于复刻学习。",
+    "category": "tech",
+    "tags": [
+      "AI",
+      "SaaS",
+      "架构",
+      "逆向",
+      "复刻"
+    ],
+    "pubDate": "2026-06-12",
+    "url": "/blog/tech-meow-ai-recon/",
+    "excerpt": "喵极 AI（meow.yyr5.com）技术架构深度分析\n\n分析日期：20260612\n分析方式：前端代码逆向 + 公开 API 探测 + 一次真实账号实测生成任务\n分析目标：理解 AI 表情包 SaaS 的完整产品/工程架构，用于复刻学习\n\n\n\n 0. 一句话总结\n\n一个用 Vite + React + Node.js 跑在腾讯云上的 AI 表情包 SaaS，调用 OpenAI gptimage2（经 apimart 中转）生成 16 宫格透明底表情包，客户端 JSZip 打包下载。商业上是\"能量制\" + 创作包订阅，3 套免费 + 2 次"
+  },
+  {
+    "id": "tech-docker-ops",
+    "title": "Docker 运维手册",
+    "description": "Ubuntu 24.04 / Docker 26 / Compose v2 / overlay2 / cgroup2fs / systemd 环境下的完整 Docker 运维速查与实战手册。",
+    "category": "tech",
+    "tags": [
+      "Docker",
+      "运维",
+      "Linux",
+      "Ubuntu",
+      "Compose"
+    ],
+    "pubDate": "2026-06-10",
+    "url": "/blog/tech-docker-ops/",
+    "excerpt": "Docker 运维手册\n\n 适用环境：Ubuntu 24.04 LTS / Docker 26.1.4 / Compose v2.28.1 / overlay2 / cgroup2fs / systemd\n 编写日期：20260610\n 适用服务器：124.223.155.35 (VM05ubuntu) 及同架构 CVM\n 维护：本机权威源，修改后同步飞书文档\n\n\n\n 0. 环境速查\n\nbash\n 一行总览\ndocker version format '{{.Server.Version}} | {{.Client.Version}}' 2&1"
+  },
+  {
+    "id": "tech-learn-python-beginner",
+    "title": "0 基础学 Python：一份不绕弯的学习路线图 (2026 版)",
+    "description": "不讲语法细节, 只回答 0 基础的人按什么顺序学、每个阶段学什么、最后能做什么。一份完整可执行的学习地图。",
+    "category": "tech",
+    "tags": [
+      "Python",
+      "零基础",
+      "学习路线",
+      "入门"
+    ],
+    "pubDate": "2026-06-10",
+    "url": "/blog/tech-learn-python-beginner/",
+    "excerpt": "0 基础学 Python：一份不绕弯的学习路线图（2026 版）\n\n 这篇文章不讲语法细节，只回答一个问题：0 基础的人，按什么顺序学、每个阶段学什么、最后能做什么。全文 4500 字，看完你会有一个清晰的地图。\n\n\n\n 为什么要学 Python\n\nPython 不是\"最完美的语言\"，但对 0 基础的人来说，它是最不挡路的语言。\n\n几个事实：\n\n 语法接近自然英语（if x  0: 读起来就是\"如果 x 大于 0\"）\n 装好解释器后第一行代码就能跑（print(\"hello\") 一秒出结果）\n 库生态丰富：爬虫、自动化、数据分析、AI、网页后端"
+  },
+  {
+    "id": "tech-read-imoons-theme-report",
+    "title": "read.imoons.cn 主题调研报告: 从 wp-content/themes 目录看子主题开发机会",
+    "description": "对 read.imoons.cn 当前激活主题的结构、CSS 现状、模板层级、钩子系统做完整调研, 为后续开发'暗黑极客风'子主题做技术准备。",
+    "category": "tech",
+    "tags": [
+      "WordPress",
+      "主题开发",
+      "调研",
+      "read.imoons.cn",
+      "CSS"
+    ],
+    "pubDate": "2026-06-09",
+    "url": "/blog/tech-read-imoons-theme-report/",
+    "excerpt": "read.imoons.cn 主题调研报告\n日期: 20260609\n调研人: Hermes Agent (subagent)\n目标: 为后续开发「暗黑极客风」子主题做准备\n操作: 仅调研，未改动任何文件\n\n\n\n ⚠️ 关键发现（先看这个）\n\n1. 当前激活的主题不是 imoonsfuture，而是 imoonsfuture.bak20260608152439（一个 .bak 后缀的目录）。wp option get template/stylesheet 都返回这个 bak 目录。\n2. 两个目录的 sty"
+  },
+  {
+    "id": "tech-name-imoons-spa-redesign",
+    "title": "name.imoons.cn SPA 重构方案",
+    "description": "15KB 11 章: 把 10 个 10 年前的 PHP/HTML 页面重构为手机 + 桌面自适应的现代 SPA。架构设计 + 技术选型对比 + 12 周实施计划。",
+    "category": "tech",
+    "tags": [
+      "SPA",
+      "重构",
+      "name.imoons.cn",
+      "架构"
+    ],
+    "pubDate": "2026-05-20",
+    "url": "/blog/tech-name-imoons-spa-redesign/",
+    "excerpt": "name.imoons.cn SPA 重构方案\n\n 一、项目目标\n\n将 name.imoons.cn 现有的 10 个 PHP/HTML 页面（10 年前的样式）重构为一个手机 + 桌面自适应的现代 SPA。前端技术栈对齐已经在 n.imoons.cn 跑起来的 bazinamer 项目（Vite + React 18 + React Router v6 + Tailwind 3）。后端保留现有 PHP（MySQL + 6tail/lunarphp + MiniMax M3 AI），改造为纯 JSON API 给前端调用。\n\n成果衡量标准：手机（375px）/ 平板（768px）"
+  },
+  {
+    "id": "tech-fundquant-overview",
+    "title": "FundQuant 基金量化助手 - 项目技术文档 v1.0",
+    "description": "13 章 13KB: 系统架构、模块设计、数据库、接口、部署、监控, FundQuant 基金量化助手的完整技术全景。",
+    "category": "tech",
+    "tags": [
+      "FundQuant",
+      "基金",
+      "量化",
+      "架构"
+    ],
+    "pubDate": "2026-04-16",
+    "url": "/blog/tech-fundquant-overview/",
+    "excerpt": "FundQuant 基金量化助手  项目技术文档\n\n 文档版本: v1.0  \n 生成日期: 20260416  \n 维护状态: 活跃开发中\n\n\n\n 目录\n\n1. 项目概述(1项目概述)\n2. 系统架构(2系统架构)\n3. 部署环境(3部署环境)\n4. 项目结构(4项目结构)\n5. 数据库设计(5数据库设计)\n6. 前端功能(6前端功能)\n7. 后端API(7后端api)\n8. 核心模块(8核心模块)\n9. 第三方服务(9第三方服务)\n10. 运维指南(10运维指"
+  },
+  {
+    "id": "tech-fundquant-admin",
+    "title": "FundQuant 管理后台 - 开发文档 v2.0",
+    "description": "11 章 17KB: 管理后台的功能模块、数据库设计、权限系统、核心业务流程。",
+    "category": "tech",
+    "tags": [
+      "FundQuant",
+      "管理后台",
+      "权限"
+    ],
+    "pubDate": "2026-04-13",
+    "url": "/blog/tech-fundquant-admin/",
+    "excerpt": "FundQuant 管理后台系统  开发文档\n\n版本: v2.0\n日期: 20260413\n状态: 待确认\n\n\n\n 1. 项目概述\n\n 1.1 背景\nFundQuant 基金量化助手现有前端面向用户展示，当前端功能已完善。现需要开发独立的管理后台系统，用于运维管理。\n\n 1.2 目标\n为 FundQuant 开发独立的管理后台系统，实现持仓管理、AI模型配置、第三方API管理等功能。\n\n 1.3 数据库配置\n\n| 配置项 | 值 |\n|||\n| 数据库 | funds |\n| 用户名 | funds |\n|"
+  }
+]
