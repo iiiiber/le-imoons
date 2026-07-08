@@ -1,0 +1,9 @@
+# robots.txt - 鹏飞日记
+# https://le.imoons.cn/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /404
+
+# 指向 sitemap
+Sitemap: https://le.imoons.cn/sitemap-index.xml
