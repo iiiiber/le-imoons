@@ -1,0 +1,2 @@
+# CF Pages: 任何未匹配路径 fallback 到 404.html
+/404    /404.html   404
