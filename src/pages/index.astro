@@ -1,0 +1,674 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const techCount = allPosts.filter((p) => p.data.category === 'tech').length;
+const lifeCount = allPosts.filter((p) => p.data.category === 'life').length;
+
+// 标签云 (聚合所有文章的 tags)
+const tagMap: Record<string, number> = {};
+allPosts.forEach((p) => {
+  p.data.tags.forEach((t) => {
+    tagMap[t] = (tagMap[t] || 0) + 1;
+  });
+});
+const tags = Object.entries(tagMap)
+  .sort((a, b) => b[1] - a[1])
+  .map(([name, count]) => ({ name, count }));
+
+// Featured: 最新一篇 (置顶大卡)
+const featured = allPosts[0];
+const recentPosts = allPosts.slice(1); // 其余放列表
+
+// 6 个项目入口 (来自 about 页) — 简版带首页
+const projects = [
+  { icon: 'target',     title: 'Hermes Agent',   tag: 'AI Agent', url: 'https://hermes.imoons.cn' },
+  { icon: 'recycle',    title: '旧衣回收',        tag: '回收',      url: 'https://sujh.net' },
+  { icon: 'gift',       title: '灵渠圈',          tag: '礼品',      url: 'https://lingququan.imoons.cn' },
+  { icon: 'book-open',  title: '基金助手',        tag: '基金',      url: 'https://fund.imoons.cn' },
+  { icon: 'pen-tool',   title: 'A 股量化',        tag: '量化',      url: 'https://quant.imoons.cn' },
+  { icon: 'sparkles',   title: '月光小站',        tag: '副业',      url: 'https://moonlight.imoons.cn' },
+];
+
+// 算"持续更新 N 天"
+const oldest = new Date(Math.min(...allPosts.map((p) => +p.data.pubDate)));
+const daysActive = Math.max(1, Math.floor((Date.now() - +oldest) / 86400000) + 1);
+
+// 字数统计
+let totalChars = 0;
+for (const p of allPosts) {
+  const text = p.body || '';
+  for (const c of text) if (/[\u4e00-\u9fff\w]/.test(c)) totalChars++;
+}
+
+function formatDate(d: Date) {
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}.${m}.${day}`;
+}
+
+function readingTime(text: string): number {
+  // 中文按字数 / 300, 英文按 word / 200
+  const cn = (text.match(/[\u4e00-\u9fff]/g) || []).length;
+  const en = (text.replace(/[\u4e00-\u9fff]/g, ' ').match(/\S+/g) || []).length;
+  return Math.max(1, Math.round(cn / 300 + en / 200));
+}
+---
+<BaseLayout title="鹏飞日记 · 写点技术，写点生活" wide>
+  {/* ====== Hero (保留风格) ====== */}
+  <section class="hero">
+    <p class="hero-eyebrow">
+      <Icon name="sparkle" size={14} color="var(--accent)" />
+      A Personal Journal
+    </p>
+    <h1 class="hero-title">
+      <span class="grad">折腾不止</span><br />
+      <span>记录所思</span>
+    </h1>
+    <p class="hero-desc">
+      这里记录我折腾的东西——<strong>技术上的折腾</strong>和<strong>生活里的折腾</strong>。
+      目前写了 <span class="num-accent">{techCount}</span> 篇技术笔记和 <span class="num-accent-2">{lifeCount}</span> 篇生活随笔。
+    </p>
+  </section>
+
+  {/* ====== Featured 置顶卡 ====== */}
+  {featured && (
+    <section class="featured-wrap">
+      <a href={`/blog/${featured.id}/`} class="featured">
+        <div class="featured-left">
+          <div class="featured-meta">
+            <span class={`tag tag-${featured.data.category}`}>
+              {featured.data.category === 'tech' ? 'TECH' : 'LIFE'}
+            </span>
+            <span class="featured-pick">
+              <Icon name="sparkle" size={12} color="var(--accent)" />
+              置顶推荐
+            </span>
+            <time>{formatDate(featured.data.pubDate)}</time>
+          </div>
+          <h2 class="featured-title">{featured.data.title}</h2>
+          {featured.data.description && (
+            <p class="featured-desc">{featured.data.description}</p>
+          )}
+          <div class="featured-cta">
+            <span>阅读全文</span>
+            <Icon name="arrow-right" size={16} color="var(--bg)" />
+          </div>
+        </div>
+        <div class="featured-right">
+          {/* SVG 装饰大图标 */}
+          <Icon
+            name={featured.data.category === 'tech' ? 'pen-tool' : 'coffee'}
+            size={140}
+            color="var(--accent)"
+          />
+        </div>
+      </a>
+    </section>
+  )}
+
+  {/* ====== 数据小条 (KPI) ====== */}
+  <section class="kpis">
+    <div class="kpi">
+      <span class="kpi-num">{allPosts.length}</span>
+      <span class="kpi-label">篇文章</span>
+    </div>
+    <div class="kpi-sep"></div>
+    <div class="kpi">
+      <span class="kpi-num">{totalChars.toLocaleString()}</span>
+      <span class="kpi-label">总字数</span>
+    </div>
+    <div class="kpi-sep"></div>
+    <div class="kpi">
+      <span class="kpi-num">{tags.length}</span>
+      <span class="kpi-label">个标签</span>
+    </div>
+    <div class="kpi-sep"></div>
+    <div class="kpi">
+      <span class="kpi-num">{daysActive}</span>
+      <span class="kpi-label">天持续更新</span>
+    </div>
+  </section>
+
+  {/* ====== 主内容双栏 ====== */}
+  <section class="main-grid">
+    {/* 左: 最新文章 */}
+    <div class="posts-col">
+      <h2 class="section-title">
+        <span class="section-icon">
+          <Icon name="sparkle" size={14} color="#fff" />
+        </span>
+        最新文章
+      </h2>
+      {recentPosts.length === 0 ? (
+        <p class="empty">还没写呢，先去 <code>src/content/blog/</code> 写第一篇吧。</p>
+      ) : (
+        <ul class="post-list">
+          {recentPosts.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}/`} class="post-card">
+                <div class="post-meta">
+                  <span class={`tag tag-${post.data.category}`}>
+                    {post.data.category === 'tech' ? 'TECH' : 'LIFE'}
+                  </span>
+                  <time>{formatDate(post.data.pubDate)}</time>
+                  <span class="post-rt">· {readingTime(post.body || '')} min</span>
+                </div>
+                <h3>{post.data.title}</h3>
+                {post.data.description && <p>{post.data.description}</p>}
+                {post.data.tags.length > 0 && (
+                  <div class="post-tags">
+                    {post.data.tags.slice(0, 3).map((t) => (
+                      <span class="post-tag">#{t}</span>
+                    ))}
+                  </div>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+      <a href="/blog/" class="see-all">
+        查看全部 {allPosts.length} 篇
+        <Icon name="arrow-right" size={14} color="var(--accent)" />
+      </a>
+    </div>
+
+    {/* 右: 侧栏 */}
+    <aside class="side-col">
+      {/* 标签云 */}
+      <div class="side-card">
+        <h3 class="side-title">
+          <Icon name="package" size={14} color="var(--accent)" />
+          标签
+        </h3>
+        <div class="tag-cloud">
+          {tags.map((t) => (
+            <a href={`/search/?q=${encodeURIComponent(t.name)}`} class={`tag-cloud-item tag-cloud-${Math.min(3, t.count)}`}>
+              #{t.name}
+              <sup>{t.count}</sup>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* 我的项目 */}
+      <div class="side-card">
+        <h3 class="side-title">
+          <Icon name="briefcase" size={14} color="var(--accent)" />
+          在做的事
+        </h3>
+        <ul class="project-list">
+          {projects.map((p) => (
+            <li>
+              <a href={p.url} target="_blank" rel="noopener" class="project-item">
+                <Icon name={p.icon} size={16} color="var(--accent)" />
+                <span class="project-title">{p.title}</span>
+                <span class="project-tag">{p.tag}</span>
+                <Icon name="external-link" size={12} color="var(--text-mute)" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 最新更新 (取最新 3 篇的小型列表, 防 featured 看不到但又有人想看) */}
+      <div class="side-card">
+        <h3 class="side-title">
+          <Icon name="loader" size={14} color="var(--accent-2)" />
+          最近更新
+        </h3>
+        <ul class="recent-list">
+          {allPosts.slice(0, 4).map((p) => (
+            <li>
+              <a href={`/blog/${p.id}/`} class="recent-item">
+                <span class={`dot dot-${p.data.category}`}></span>
+                <span class="recent-title">{p.data.title}</span>
+                <time>{formatDate(p.data.pubDate).slice(5)}</time>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ====== Hero (沿用之前风格) ====== */
+  .hero {
+    margin-bottom: 2.5rem;
+    padding: 2rem 0 2.2rem;
+  }
+  .hero-eyebrow {
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 1.2rem;
+    letter-spacing: -0.02em;
+  }
+  .grad {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .hero-desc {
+    color: var(--text-dim);
+    font-size: 1.08rem;
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0;
+  }
+  .hero-desc strong { color: var(--text); }
+  .num-accent { color: var(--accent); font-weight: 600; }
+  .num-accent-2 { color: var(--accent-2); font-weight: 600; }
+
+  /* ====== Featured 置顶卡 ====== */
+  .featured-wrap { margin-bottom: 2.5rem; }
+  .featured {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.8rem 2rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient);
+    opacity: 0.04;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .featured:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  }
+  .featured:hover::before { opacity: 0.08; }
+  .featured-left { flex: 1; min-width: 0; }
+  .featured-right {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+    background: var(--accent-soft);
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .featured:hover .featured-right { opacity: 1; }
+
+  .featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.7rem;
+    flex-wrap: wrap;
+  }
+  .featured-meta time {
+    color: var(--text-mute);
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+  }
+  .featured-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .featured-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 0.6rem;
+    letter-spacing: -0.01em;
+  }
+  .featured-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 0 1.1rem;
+  }
+  .featured-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5em 1.1em;
+    background: var(--text);
+    color: var(--bg);
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .featured:hover .featured-cta {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* ====== 标签 ====== */
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.18em 0.65em;
+    border-radius: 100px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .tag-tech { background: var(--accent-soft); color: var(--accent); }
+  .tag-life { background: var(--accent-2-soft); color: var(--accent-2); }
+
+  /* ====== KPI 数据条 ====== */
+  .kpis {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 2.5rem;
+  }
+  .kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+  }
+  .kpi-num {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .kpi-label {
+    color: var(--text-mute);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+  .kpi-sep {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+  }
+
+  /* ====== 主内容双栏 ====== */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  /* 左栏 */
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    margin: 0 0 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-icon {
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--gradient);
+    align-items: center;
+    justify-content: center;
+  }
+  .post-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.9rem; }
+  .post-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.4rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .post-card:hover {
+    border-color: var(--accent);
+    border-left-color: var(--accent);
+    transform: translateX(4px);
+    background: var(--bg-card-hover);
+  }
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .post-meta time, .post-rt {
+    color: var(--text-mute);
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+  }
+  .post-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 0.35rem;
+  }
+  .post-card p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin: 0 0 0.5rem;
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+  .post-tag {
+    font-size: 0.72rem;
+    color: var(--text-mute);
+    font-family: var(--font-mono);
+  }
+  .empty {
+    color: var(--text-dim);
+    padding: 2rem 0;
+  }
+  .see-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.4rem;
+    padding: 0.6em 1.2em;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    transition: all 0.2s;
+  }
+  .see-all:hover {
+    border-color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  /* ====== 侧栏 ====== */
+  .side-col { display: flex; flex-direction: column; gap: 1.2rem; }
+  .side-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+  }
+  .side-title {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin: 0 0 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tag-cloud-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.25em 0.7em;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .tag-cloud-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .tag-cloud-item sup {
+    font-size: 0.65rem;
+    color: var(--text-mute);
+  }
+  .tag-cloud-3 { font-weight: 600; }
+  .tag-cloud-3:hover { color: var(--accent); }
+  .tag-cloud-1 { opacity: 0.85; }
+
+  .project-list, .recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .project-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    transition: all 0.2s;
+  }
+  .project-item:hover {
+    background: var(--bg);
+    transform: translateX(2px);
+  }
+  .project-title { flex: 1; }
+  .project-tag {
+    font-size: 0.7rem;
+    color: var(--text-mute);
+    font-family: var(--font-mono);
+  }
+  .recent-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .recent-item:hover {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-tech { background: var(--accent); }
+  .dot-life { background: var(--accent-2); }
+  .recent-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .recent-item time {
+    font-size: 0.72rem;
+    color: var(--text-mute);
+    font-family: var(--font-mono);
+    flex-shrink: 0;
+  }
+
+  /* ====== 响应式 ====== */
+  @media (max-width: 900px) {
+    .main-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .side-col { order: 2; }
+    .featured {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      text-align: left;
+    }
+    .featured-right {
+      width: 100%;
+      height: 80px;
+    }
+  }
+  @media (max-width: 640px) {
+    .kpis {
+      flex-wrap: wrap;
+      gap: 0.8rem 1rem;
+    }
+    .kpi-sep { display: none; }
+    .kpi { flex: 0 0 calc(50% - 0.5rem); }
+    .featured { padding: 1.3rem 1.4rem; }
+  }
+</style>
