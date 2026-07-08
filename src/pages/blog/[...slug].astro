@@ -1,0 +1,346 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Giscus from '../../components/Giscus.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', ({ data }) => !data.draft);
+  // 按 pubDate 倒序: 最新在前
+  const sorted = [...all].sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
+  return sorted.map((post, i) => {
+    // i=0 是最新, prev=0 的话没有更早的; next=i+1 的话没有更新的
+    const prev = i + 1 < sorted.length ? sorted[i + 1] : null;
+    const next = i > 0 ? sorted[i - 1] : null;
+    return {
+      params: { slug: post.id },
+      props: { post, prev, next },
+    };
+  });
+}
+
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+
+// 过滤出 h2 + h3, 但要排除从 h1 demote 来的(避免跟 hero 重复)
+// rehypeDemoteH1 在 rehype 阶段把 h1 改成了 h2, 所以 headings API 返回的
+// demote 后的 "h1" 实际 depth=2. headings.text 末尾被 autolink-headings 追加了 '#'
+// 所以要去掉尾部的 '#' 装饰再对比 post.data.title
+const tocItems = (headings || []).filter((h) => {
+  if (h.depth !== 2 && h.depth !== 3) return false;
+  // 排除 demote 来的 h1 (text 去尾 '#' 后等于文章标题)
+  const cleanText = (h.text || '').replace(/#+\s*$/, '').trim();
+  if (cleanText === post.data.title) return false;
+  return true;
+});
+
+function formatDate(d: Date) {
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}.${m}.${day}`;
+}
+
+function shortTitle(t: string, max = 28) {
+  return t.length > max ? t.slice(0, max) + '…' : t;
+}
+---
+<BaseLayout title={`${post.data.title} · 鹏飞日记`} description={post.data.description} wide>
+  <article>
+    <header style="margin: 0 0 3rem; padding: 1.5rem 0 2rem; border-bottom: 1px dashed var(--border);">
+      <div style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.2rem; flex-wrap: wrap;">
+        <a
+          href={`/${post.data.category}/`}
+          style={`font-size: 0.7rem; padding: 0.25em 0.8em; border-radius: 100px; font-weight: 600; letter-spacing: 0.08em; background: ${post.data.category === 'tech' ? 'var(--accent-soft)' : 'var(--accent-2-soft)'}; color: ${post.data.category === 'tech' ? 'var(--accent)' : 'var(--accent-2)'}; text-decoration: none;`}
+        >
+          {post.data.category === 'tech' ? 'TECH' : 'LIFE'}
+        </a>
+        <time datetime={post.data.pubDate.toISOString()} style="color: var(--text-mute); font-size: 0.85rem; font-family: var(--font-mono);">
+          {formatDate(post.data.pubDate)}
+        </time>
+        {post.data.updatedDate && (
+          <span style="color: var(--text-mute); font-size: 0.85rem;">· 更新于 {formatDate(post.data.updatedDate)}</span>
+        )}
+      </div>
+      <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.2; margin: 0 0 1rem; letter-spacing: -0.02em; color: var(--text);">
+        {post.data.title}
+      </h1>
+      {post.data.description && (
+        <p style="font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.6; color: var(--text-dim); font-style: italic; margin: 0;">
+          {post.data.description}
+        </p>
+      )}
+      {post.data.tags.length > 0 && (
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1.2rem;">
+          {post.data.tags.map((t) => (
+            <span style="font-size: 0.78rem; padding: 0.2em 0.6em; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 4px; color: var(--text-dim); font-family: var(--font-mono);">
+              #{t}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    {/* ====== 主内容 + 右侧 TOC (桌面) ====== */}
+    <div class="post-layout">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {tocItems.length > 0 && (
+        <aside class="toc-desktop" aria-label="文章目录">
+          <div class="toc-inner">
+            <div class="toc-title">文章目录</div>
+            <nav>
+              <ol>
+                {tocItems.map((h) => (
+                  <li class={`toc-depth-${h.depth}`}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          </div>
+        </aside>
+      )}
+    </div>
+
+    {/* ====== 移动端 TOC 折叠 (在正文上方) ====== */}
+    {tocItems.length > 0 && (
+      <details class="toc-mobile">
+        <summary>
+          <span>📑 文章目录</span>
+          <span class="toc-mobile-count">({tocItems.length} 节)</span>
+        </summary>
+        <ol>
+          {tocItems.map((h) => (
+            <li class={`toc-depth-${h.depth}`}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    )}
+
+    <hr />
+
+    {/* ====== 上一篇 / 下一篇 (在 Giscus 上方) ====== */}
+    <nav class="post-nav" aria-label="文章导航">
+      {prev ? (
+        <a href={`/blog/${prev.id}/`} class="post-nav-link post-nav-prev">
+          <span class="post-nav-label">← 上一篇</span>
+          <span class="post-nav-title">{shortTitle(prev.data.title)}</span>
+        </a>
+      ) : (
+        <div class="post-nav-empty" />
+      )}
+      {next ? (
+        <a href={`/blog/${next.id}/`} class="post-nav-link post-nav-next">
+          <span class="post-nav-label">下一篇 →</span>
+          <span class="post-nav-title">{shortTitle(next.data.title)}</span>
+        </a>
+      ) : (
+        <div class="post-nav-empty" />
+      )}
+    </nav>
+
+    <div style="text-align: center; padding: 1rem 0;">
+      <a href="/" style="display: inline-flex; align-items: center; gap: 0.4rem; color: var(--text-dim); font-size: 0.9rem;">
+        ← 回到首页
+      </a>
+    </div>
+  </article>
+  <Giscus />
+</BaseLayout>
+
+<style>
+  /* ====== 主+侧双栏布局 (D方案: prose 760 + TOC 220 弹性布局, 全部左对齐) ====== */
+  .post-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2rem;                 /* prose 和 toc 之间 32px 间距 */
+  }
+  .post-layout > .prose {
+    /* prose 占据 main 1024 - TOC 220 - gap 32 = 剩余空间, flex:1 自动填满 */
+    flex: 1 1 auto;
+    min-width: 0;              /* 防止 flex 子项被内容撑大 */
+  }
+  .toc-desktop {
+    /* flex item, 固定 220px, 跟 prose 顶端对齐 */
+    flex: 0 0 220px;
+    position: sticky;          /* 改 sticky 跟随滚动 */
+    top: 6rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    overflow-x: hidden;        /* 防止长标题溢出 */
+  }
+  .toc-inner {
+    border-left: 2px solid var(--border);
+    padding-left: 0.8rem;
+    font-size: 0.8rem;
+  }
+  .toc-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+  }
+  .toc-desktop ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .toc-desktop li {
+    margin: 0.55em 0;
+    line-height: 1.5;
+  }
+  .toc-desktop li.toc-depth-3 {
+    padding-left: 0.9rem;
+    font-size: 0.78rem;
+  }
+  .toc-desktop li a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: block;
+    word-break: break-word;    /* 防止长标题溢出 TOC 容器 */
+    line-height: 1.45;
+  }
+  .toc-desktop li a:hover {
+    color: var(--accent);
+  }
+
+  /* ====== 移动端 TOC 折叠 ====== */
+  .toc-mobile {
+    display: none;
+    margin: 2rem 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.8rem 1rem;
+  }
+  .toc-mobile summary {
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .toc-mobile summary::-webkit-details-marker { display: none; }
+  .toc-mobile-count {
+    color: var(--text-mute);
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+  .toc-mobile[open] summary { margin-bottom: 0.6rem; }
+  .toc-mobile ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .toc-mobile li {
+    margin: 0.3em 0;
+    line-height: 1.5;
+  }
+  .toc-mobile li.toc-depth-3 { padding-left: 1rem; }
+  .toc-mobile li a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.88rem;
+  }
+  .toc-mobile li a:hover { color: var(--accent); }
+
+  /* ====== 上一篇 / 下一篇 ====== */
+  .post-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 1rem 1.2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition: all 0.2s;
+    min-width: 0;
+  }
+  .post-nav-link:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .post-nav-prev { text-align: left; }
+  .post-nav-next { text-align: right; }
+  .post-nav-empty {
+    /* 占位, 让单边有空不至于布局崩 */
+  }
+  .post-nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .post-nav-title {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ====== prose 原有样式 ====== */
+  .prose :global(p) { margin: 1.1em 0; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.5em; }
+  .prose :global(li) { margin: 0.5em 0; }
+  .prose :global(strong) { color: var(--text); font-weight: 600; }
+  .prose :global(a) {
+    text-decoration: underline;
+    text-decoration-color: var(--accent-soft);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+  }
+  .prose :global(a:hover) { text-decoration-color: var(--accent); }
+  /* prose 内 demote 来的 h2 (从 markdown # 改的) 隐藏, 避免跟 hero h1 重复 */
+  .prose :global(.demoted-from-h1) {
+    display: none !important;
+  }
+  .prose :global(h2) { margin-top: 2.2em; scroll-margin-top: 4rem; }
+  .prose :global(h3) { margin-top: 1.8em; scroll-margin-top: 4rem; }
+  .prose :global(blockquote) { font-style: italic; }
+  .prose :global(.heading-anchor) {
+    color: var(--text-mute);
+    text-decoration: none;
+    margin-left: 0.4rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .prose :global(h2:hover .heading-anchor),
+  .prose :global(h3:hover .heading-anchor) { opacity: 1; }
+
+  /* ====== 响应式: 移动端隐藏右侧 TOC, 显示顶部折叠 ====== */
+  @media (max-width: 1180px) {
+    /* 视口不够宽, TOC 浮动会与主内容重叠, 改回顶部折叠 */
+    .toc-desktop { display: none; }
+    .toc-mobile { display: block; }
+  }
+  @media (max-width: 640px) {
+    .post-nav { grid-template-columns: 1fr; }
+    .post-nav-next { text-align: left; }
+  }
+</style>
