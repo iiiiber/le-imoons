@@ -46,3 +46,5 @@ npm run preview    # 本地预览构建结果
 ```
 
 适合部署到 Cloudflare Pages / Vercel / Netlify。
+
+<!-- trigger rebuild at 2026-07-08T07:52:22Z -->
