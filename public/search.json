@@ -15,6 +15,22 @@
     "excerpt": "AI 应用开发工程师知识体系与学习地图\n\n 背景\n\nAI 应用开发工程师（AI Application Engineer）这个角色介于传统后端 / 前端工程师和算法工程师之间——你不需要从零训练大模型，但要能基于 LLM 做出能在生产环境跑得动的产品。\n\n过去三年（20232026），随着 LangChain / LlamaIndex / vLLM / MCP / Agent 框架爆发，这个岗位的招聘需求和薪资天花板都在快速抬升。但知识体系是散的——算法工程师只教原理，后端工程师只教工程，没有一份从「我要入门」到「我能独立交付 AI 产品」的完整地图。\n\n这篇文章把"
   },
   {
+    "id": "tech-blog-ops-guide",
+    "title": "博客自建运维指南",
+    "description": "从日常更新到问题排查，完整的博客站点运维手册，涵盖 Astro + Cloudflare Pages + Git 操作。",
+    "category": "tech",
+    "tags": [
+      "运维",
+      "Cloudflare",
+      "Git",
+      "博客",
+      "Astro"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-blog-ops-guide/",
+    "excerpt": "博客自建运维指南\n\n 适用环境：Linux / Node.js ≥ 22 / Astro 7 / Cloudflare Pages\n 编写日期：20260708\n 适用场景：个人博客日常维护、内容更新、问题排查\n\n\n\n 一、日常更新流程\n\n 1. 写文章\n\n在 src/content/blog/ 下新建 .md 文件：\n\nbash\ncd /workspace\ntouch src/content/blog/technewpost.md\n\n\n文章 frontmatter 格式：\n\nyaml\n\ntitle: \"文章标题\"\ndescr"
+  },
+  {
     "id": "tech-fio-disk-benchmark",
     "title": "Fio 磁盘性能测试指南",
     "description": "从安装到实战，全面讲解 fio 测试磁盘 IOPS、吞吐量、延迟的方法，包含 NVMe / SSD / HDD 测试参数与结果解读。",
