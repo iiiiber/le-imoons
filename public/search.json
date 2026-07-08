@@ -15,6 +15,22 @@
     "excerpt": "AI 应用开发工程师知识体系与学习地图\n\n 背景\n\nAI 应用开发工程师（AI Application Engineer）这个角色介于传统后端 / 前端工程师和算法工程师之间——你不需要从零训练大模型，但要能基于 LLM 做出能在生产环境跑得动的产品。\n\n过去三年（20232026），随着 LangChain / LlamaIndex / vLLM / MCP / Agent 框架爆发，这个岗位的招聘需求和薪资天花板都在快速抬升。但知识体系是散的——算法工程师只教原理，后端工程师只教工程，没有一份从「我要入门」到「我能独立交付 AI 产品」的完整地图。\n\n这篇文章把"
   },
   {
+    "id": "tech-fio-disk-benchmark",
+    "title": "Fio 磁盘性能测试指南",
+    "description": "从安装到实战，全面讲解 fio 测试磁盘 IOPS、吞吐量、延迟的方法，包含 NVMe / SSD / HDD 测试参数与结果解读。",
+    "category": "tech",
+    "tags": [
+      "fio",
+      "Linux",
+      "磁盘测试",
+      "IOPS",
+      "运维"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-fio-disk-benchmark/",
+    "excerpt": "Fio 磁盘性能测试指南\n\n 适用环境：Linux (Ubuntu / CentOS / Debian) / fio 3.x\n 编写日期：20260708\n 适用场景：SSD / NVMe / HDD 性能评估、云盘选型、存储压测\n\n\n\n 0. 为什么用 fio\n\nfio (Flexible I/O Tester) 是业界标准的磁盘性能测试工具，原因：\n\n 灵活：支持十几种引擎，参数可任意组合\n 准确：直接调用 libaio / io_uring，绕过缓存干扰\n 通用：Linux / Windows / macOS 全平台\n 权威"
+  },
+  {
     "id": "tech-build-blog-with-astro",
     "title": "用 Astro 搭建个人博客",
     "description": "从零开始用 Astro 7 搭建一个支持技术笔记和生活随笔分类的博客,集成 Giscus 评论,准备部署到 Cloudflare Pages。",

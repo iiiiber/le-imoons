@@ -45,18 +45,7 @@ function shortTitle(t: string, max = 28) {
   return t.length > max ? t.slice(0, max) + '…' : t;
 }
 ---
-<BaseLayout
-  title={`${post.data.title} · 鹏飞日记`}
-  description={post.data.description}
-  wide
-  ogTitle={post.data.title}
-  ogDescription={post.data.description}
-  ogType="article"
-  publishedTime={post.data.pubDate.toISOString()}
-  modifiedTime={post.data.updatedDate?.toISOString()}
-  author="鹏飞 (buer@imoons.cn)"
-  tags={post.data.tags}
->
+<BaseLayout title={`${post.data.title} · 鹏飞日记`} description={post.data.description} wide>
   <article>
     <header style="margin: 0 0 3rem; padding: 1.5rem 0 2rem; border-bottom: 1px dashed var(--border);">
       <div style="display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.2rem; flex-wrap: wrap;">
