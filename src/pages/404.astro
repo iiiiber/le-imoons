@@ -1,0 +1,462 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+// 取最近 3 篇 (作为推荐, 让用户留下来)
+const recent = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+
+function formatDate(d: Date) {
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}.${m}.${day}`;
+}
+---
+<BaseLayout title="404 · 页面不存在 · 鹏飞日记" description="这页不存在。回到首页, 或浏览最新文章。" wide>
+  <div class="not-found">
+    {/* ===== 顶部: 大 404 + 插画 ===== */}
+    <section class="nf-hero">
+      <div class="nf-code" aria-hidden="true">404</div>
+
+      {/* 浮动装饰: 4 个 SVG 散落 */}
+      <div class="nf-deco nf-deco-1" aria-hidden="true">
+        <Icon name="search" size={32} color="var(--accent)" />
+      </div>
+      <div class="nf-deco nf-deco-2" aria-hidden="true">
+        <Icon name="sparkle" size={24} color="var(--accent-2)" />
+      </div>
+      <div class="nf-deco nf-deco-3" aria-hidden="true">
+        <Icon name="info" size={28} color="var(--accent)" />
+      </div>
+      <div class="nf-deco nf-deco-4" aria-hidden="true">
+        <Icon name="frown" size={26} color="var(--text-mute)" />
+      </div>
+
+      <h1 class="nf-title">这页不存在</h1>
+      <p class="nf-subtitle">
+        链接可能失效了, 或者地址输错了。<br />
+        下面这几个去处, 应该能帮到你。
+      </p>
+    </section>
+
+    {/* ===== 操作区: 3 个主按钮 ===== */}
+    <section class="nf-actions">
+      <a href="/" class="nf-action nf-action-primary">
+        <Icon name="corner-down-left" size={18} color="var(--bg)" />
+        <span>回到首页</span>
+      </a>
+      <a href="/blog/" class="nf-action">
+        <Icon name="book-open" size={18} color="var(--accent)" />
+        <span>所有文章</span>
+      </a>
+      <button type="button" class="nf-action nf-action-search" id="nfSearchBtn">
+        <Icon name="search" size={18} color="var(--accent)" />
+        <span>站内搜索</span>
+        <kbd>⌘K</kbd>
+      </button>
+    </section>
+
+    {/* ===== 搜索框 (默认隐藏, 点按钮展开) ===== */}
+    <section class="nf-search-wrap" id="nfSearchWrap" hidden>
+      <form action="/search/" method="get" class="nf-search-form">
+        <Icon name="search" size={18} color="var(--text-mute)" />
+        <input
+          type="search"
+          name="q"
+          placeholder="搜标题、标签、正文..."
+          autocomplete="off"
+          autofocus
+          id="nfSearchInput"
+        />
+        <button type="submit" class="nf-search-submit">
+          <Icon name="arrow-right" size={18} color="var(--bg)" />
+        </button>
+      </form>
+      <p class="nf-search-hint">按 <kbd>Enter</kbd> 搜索 · <kbd>Esc</kbd> 关闭</p>
+    </section>
+
+    {/* ===== 推荐最近文章 ===== */}
+    {recent.length > 0 && (
+      <section class="nf-recent">
+        <h2 class="nf-section-title">
+          <Icon name="sparkle" size={14} color="var(--accent)" />
+          最新文章
+        </h2>
+        <ul class="nf-recent-list">
+          {recent.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}/`} class="nf-recent-card">
+                <div class="nf-recent-meta">
+                  <span class={`nf-tag nf-tag-${post.data.category}`}>
+                    {post.data.category === 'tech' ? 'TECH' : 'LIFE'}
+                  </span>
+                  <time datetime={post.data.pubDate.toISOString()}>
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                </div>
+                <h3>{post.data.title}</h3>
+                {post.data.description && <p>{post.data.description}</p>}
+                <span class="nf-recent-arrow">
+                  <Icon name="arrow-right" size={14} color="var(--accent)" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {/* ===== 底部: 4 个分类入口 ===== */}
+    <section class="nf-categories">
+      <a href="/tech/" class="nf-cat">
+        <Icon name="pen-tool" size={20} color="var(--accent)" />
+        <span>技术笔记</span>
+      </a>
+      <a href="/life/" class="nf-cat">
+        <Icon name="coffee" size={20} color="var(--accent-2)" />
+        <span>生活随笔</span>
+      </a>
+      <a href="/about/" class="nf-cat">
+        <Icon name="map-pin" size={20} color="var(--text-dim)" />
+        <span>关于我</span>
+      </a>
+      <a href="/search/" class="nf-cat">
+        <Icon name="search" size={20} color="var(--text-dim)" />
+        <span>搜索</span>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // 搜索框展开 / 收起
+  const btn = document.getElementById('nfSearchBtn');
+  const wrap = document.getElementById('nfSearchWrap');
+  const input = document.getElementById('nfSearchInput') as HTMLInputElement | null;
+  if (btn && wrap && input) {
+    btn.addEventListener('click', () => {
+      const isOpen = !wrap.hasAttribute('hidden');
+      if (isOpen) {
+        wrap.setAttribute('hidden', '');
+      } else {
+        wrap.removeAttribute('hidden');
+        input.focus();
+      }
+    });
+    // Esc 关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !wrap.hasAttribute('hidden')) {
+        wrap.setAttribute('hidden', '');
+        btn?.focus();
+      }
+    });
+    // ⌘K / Ctrl+K 也能开
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        wrap.removeAttribute('hidden');
+        input.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .not-found {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 2rem 0 4rem;
+  }
+
+  /* ====== Hero ====== */
+  .nf-hero {
+    text-align: center;
+    padding: 3rem 0 2.5rem;
+    position: relative;
+  }
+  .nf-code {
+    font-family: var(--font-serif);
+    font-size: clamp(7rem, 18vw, 12rem);
+    font-weight: 700;
+    line-height: 0.9;
+    margin: 0;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    letter-spacing: -0.04em;
+    user-select: none;
+    animation: nf-fade-in 0.6s ease-out;
+  }
+  .nf-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    margin: 0.4rem 0 0.8rem;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .nf-subtitle {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* 浮动装饰 */
+  .nf-deco {
+    position: absolute;
+    opacity: 0.5;
+    animation: nf-float 6s ease-in-out infinite;
+  }
+  .nf-deco-1 { top: 10%;  left: 8%;  animation-delay: 0s; }
+  .nf-deco-2 { top: 18%; right: 12%; animation-delay: 1.5s; }
+  .nf-deco-3 { bottom: 20%; left: 15%; animation-delay: 3s; }
+  .nf-deco-4 { bottom: 8%;  right: 8%;  animation-delay: 4.5s; }
+
+  @keyframes nf-float {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    50%      { transform: translateY(-12px) rotate(8deg); }
+  }
+  @keyframes nf-fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ====== Action 按钮 ====== */
+  .nf-actions {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem 0 1rem;
+  }
+  .nf-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7em 1.2em;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .nf-action:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .nf-action-primary {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .nf-action-primary:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+  .nf-action kbd {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.1em 0.5em;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-mute);
+    margin-left: 0.3rem;
+  }
+
+  /* ====== 搜索框 ====== */
+  .nf-search-wrap {
+    max-width: 520px;
+    margin: 1rem auto 2rem;
+    padding: 1.2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    animation: nf-fade-in 0.25s ease-out;
+  }
+  .nf-search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.9rem;
+  }
+  .nf-search-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+  }
+  .nf-search-form input::placeholder { color: var(--text-mute); }
+  .nf-search-submit {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s;
+  }
+  .nf-search-submit:hover { background: var(--accent); }
+  .nf-search-hint {
+    color: var(--text-mute);
+    font-size: 0.8rem;
+    margin: 0.6rem 0 0;
+    text-align: center;
+  }
+  .nf-search-hint kbd {
+    font-family: var(--font-mono);
+    padding: 0.05em 0.4em;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 0.75rem;
+  }
+
+  /* ====== 最新文章 ====== */
+  .nf-recent {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px dashed var(--border);
+  }
+  .nf-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin: 0 0 1.2rem;
+    font-weight: 600;
+  }
+  .nf-recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.8rem;
+  }
+  .nf-recent-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.3rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .nf-recent-card:hover {
+    border-color: var(--accent);
+    border-left-color: var(--accent);
+    transform: translateX(4px);
+    box-shadow: var(--shadow);
+  }
+  .nf-recent-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.78rem;
+  }
+  .nf-recent-meta time {
+    color: var(--text-mute);
+    font-family: var(--font-mono);
+  }
+  .nf-tag {
+    font-size: 0.68rem;
+    padding: 0.15em 0.6em;
+    border-radius: 100px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .nf-tag-tech {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .nf-tag-life {
+    background: var(--accent-2-soft);
+    color: var(--accent-2);
+  }
+  .nf-recent-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+    line-height: 1.35;
+  }
+  .nf-recent-card p {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .nf-recent-arrow {
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s, right 0.2s;
+  }
+  .nf-recent-card:hover .nf-recent-arrow {
+    opacity: 1;
+    right: 0.9rem;
+  }
+
+  /* ====== 底部 4 个分类 ====== */
+  .nf-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.6rem;
+    margin-top: 2.5rem;
+  }
+  .nf-cat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .nf-cat:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ====== 响应式 ====== */
+  @media (max-width: 640px) {
+    .nf-deco { display: none; }
+    .nf-action kbd { display: none; }
+  }
+</style>
