@@ -1,0 +1,363 @@
+---
+import ThemeToggle from '../components/ThemeToggle.astro';
+import SearchBox from '../components/SearchBox.astro';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** 宽版布局 (首页/列表/404) - 默认 1200px; 文章详情页不传 (760px 阅读宽) */
+  wide?: boolean;
+}
+
+const { title, description = '鹏飞日记 - 技术笔记与生活随笔', wide = false } = Astro.props;
+const navItems = [
+  { href: '/', label: '首页' },
+  { href: '/tech/', label: '技术' },
+  { href: '/life/', label: '生活' },
+  { href: '/about/', label: '关于' },
+];
+const pathname = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="zh-CN" data-theme="dark" data-accent="blue">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      (function () {
+        try {
+          const theme = localStorage.getItem('theme') || 'dark';
+          const accent = localStorage.getItem('accent') || 'blue';
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.setAttribute('data-accent', accent);
+        } catch (e) {}
+      })();
+    </script>
+    <style is:global>
+      /* 主内容容器: 默认 760px 阅读宽, wide 模式 1200px */
+      .main-wrap {
+        max-width: var(--max-w);
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+      .main-wide {
+        max-width: var(--max-w-wide);
+      }
+      /* ========== 主色板(3 选 1) ========== */
+      [data-accent="blue"] {
+        --accent: #60a5fa;
+        --accent-soft: rgba(96, 165, 250, 0.15);
+        --accent-2: #6ee7b7;
+        --accent-2-soft: rgba(110, 231, 183, 0.15);
+        --gradient: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #6ee7b7 100%);
+      }
+      [data-accent="purple"] {
+        --accent: #a78bfa;
+        --accent-soft: rgba(167, 139, 250, 0.15);
+        --accent-2: #f0abfc;
+        --accent-2-soft: rgba(240, 171, 252, 0.15);
+        --gradient: linear-gradient(135deg, #a78bfa 0%, #f0abfc 50%, #60a5fa 100%);
+      }
+      [data-accent="green"] {
+        --accent: #4ade80;
+        --accent-soft: rgba(74, 222, 128, 0.15);
+        --accent-2: #fbbf24;
+        --accent-2-soft: rgba(251, 191, 36, 0.15);
+        --gradient: linear-gradient(135deg, #4ade80 0%, #6ee7b7 50%, #fbbf24 100%);
+      }
+
+      /* ========== 暗色主题 ========== */
+      [data-theme="dark"] {
+        --bg: #0a0e14;
+        --bg-elev: #131820;
+        --bg-card: #1a1f29;
+        --bg-card-hover: #20262f;
+        --border: #2a313a;
+        --border-soft: #1f2530;
+        --text: #e6edf3;
+        --text-dim: #8b949e;
+        --text-mute: #5d6675;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+        color-scheme: dark;
+      }
+
+      /* ========== 亮色主题 ========== */
+      [data-theme="light"] {
+        --bg: #fafbfc;
+        --bg-elev: #ffffff;
+        --bg-card: #ffffff;
+        --bg-card-hover: #f6f8fa;
+        --border: #d0d7de;
+        --border-soft: #e8ecf0;
+        --text: #1f2328;
+        --text-dim: #656d76;
+        --text-mute: #8c959f;
+        --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+        color-scheme: light;
+      }
+
+      :root {
+        --max-w: 760px;
+        --max-w-wide: 1024px;
+        --radius: 10px;
+        --radius-lg: 16px;
+        --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        --font-serif: 'Noto Serif SC', 'Georgia', 'Times New Roman', serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        line-height: 1.7;
+        font-size: 16px;
+        transition: background var(--transition), color var(--transition);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+      a:hover { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+      code {
+        font-family: var(--font-mono);
+        font-size: 0.88em;
+        background: var(--bg-elev);
+        padding: 0.15em 0.4em;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+      }
+      pre {
+        background: var(--bg-elev);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.2em 1.4em;
+        overflow-x: auto;
+        line-height: 1.6;
+        font-size: 0.92em;
+        box-shadow: var(--shadow);
+      }
+      pre code { background: none; border: none; padding: 0; font-size: inherit; }
+      blockquote {
+        border-left: 3px solid var(--accent);
+        margin: 1.5em 0;
+        padding: 0.6em 0 0.6em 1.2em;
+        color: var(--text-dim);
+        background: var(--bg-elev);
+        border-radius: 0 6px 6px 0;
+        font-family: var(--font-serif);
+        font-size: 1.05em;
+        line-height: 1.6;
+      }
+      blockquote p { margin: 0.4em 0; }
+      h1, h2, h3, h4 {
+        font-family: var(--font-serif);
+        line-height: 1.3;
+        margin-top: 1.8em;
+        letter-spacing: -0.01em;
+        font-weight: 700;
+      }
+      h1 { font-size: 2.2em; }
+      h2 {
+        font-size: 1.6em;
+        padding-bottom: 0.4em;
+        position: relative;
+      }
+      h2::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: var(--gradient);
+        border-radius: 2px;
+      }
+      h3 { font-size: 1.25em; }
+      hr {
+        border: none;
+        height: 1px;
+        background: var(--border);
+        margin: 2.5em 0;
+        position: relative;
+      }
+      hr::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        background: var(--bg);
+        padding: 0 1em;
+        width: 6px;
+        height: 6px;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 0 4px var(--bg);
+        border-radius: 1px;
+      }
+      img { max-width: 100%; border-radius: var(--radius); }
+      table { border-collapse: collapse; width: 100%; }
+      th, td { border: 1px solid var(--border); padding: 0.6em 0.9em; }
+      th { background: var(--bg-elev); }
+      ul li, ol li { margin: 0.3em 0; }
+
+      /* 选中色 */
+      ::selection {
+        background: var(--accent-soft);
+        color: var(--text);
+      }
+
+      /* 滚动条(暗色) */
+      [data-theme="dark"] ::-webkit-scrollbar { width: 10px; height: 10px; }
+      [data-theme="dark"] ::-webkit-scrollbar-track { background: var(--bg); }
+      [data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+      [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: var(--text-mute); }
+
+      /* === 顶部导航响应式（手机折叠） === */
+      @media (max-width: 640px) {
+        .nav-shell { gap: 0.5rem !important; padding: 0.9rem 1rem !important; }
+        .nav-desktop { display: none !important; }
+        .nav-mobile { display: flex !important; }
+        .nav-drawer[hidden] { display: none; }
+        .nav-drawer { display: block; }
+      }
+    </style>
+    <script>
+      // 折叠菜单
+      document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('navToggle');
+        const drawer = document.getElementById('navDrawer');
+        if (!btn || !drawer) return;
+        btn.addEventListener('click', () => {
+          const isOpen = !drawer.hasAttribute('hidden');
+          if (isOpen) {
+            drawer.setAttribute('hidden', '');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-label', '打开菜单');
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+          } else {
+            drawer.removeAttribute('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.setAttribute('aria-label', '关闭菜单');
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18 M6 6l12 12"/></svg>';
+          }
+        });
+        // 点链接后自动收起
+        drawer.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', () => {
+            drawer.setAttribute('hidden', '');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-label', '打开菜单');
+            btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>';
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <header style="border-bottom: 1px solid var(--border-soft); background: color-mix(in srgb, var(--bg-elev) 80%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 10;">
+      <div class="nav-shell" style="max-width: var(--max-w-wide); margin: 0 auto; padding: 1.1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+        <a href="/" class="nav-logo" style="display: flex; align-items: center; gap: 0.6rem; color: var(--text); text-decoration: none;">
+          <img
+            src="/images/avatar.png"
+            alt="鹏飞日记"
+            style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); transition: border-color 0.2s;"
+            onmouseover="this.style.borderColor='var(--accent)'"
+            onmouseout="this.style.borderColor='var(--border)'"
+          />
+          <span style="font-family: var(--font-serif); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em;">
+            <span style="background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">鹏飞日记</span>
+            <span style="color: var(--text-dim); font-weight: 500;">·blog</span>
+          </span>
+        </a>
+
+        <!-- 桌面导航：菜单 + 主题 + 搜索（搜索在最右） -->
+        <nav class="nav-desktop" style="display: flex; align-items: center; gap: 1.2rem;">
+          <div class="nav-menu" style="display: flex; gap: 1.4rem;">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+              return (
+                <a
+                  href={item.href}
+                  style={`color: ${isActive ? 'var(--text)' : 'var(--text-dim)'}; font-size: 0.95rem; font-weight: ${isActive ? '600' : '500'}; position: relative; transition: color var(--transition);`}
+                  onmouseover="if(!this.style.color.includes('var(--text)')) this.style.color='var(--text)'"
+                  onmouseout={`if(!${isActive}) this.style.color='var(--text-dim)'`}
+                >
+                  {item.label}
+                  {isActive && <span style={`position: absolute; bottom: -1.3rem; left: 0; right: 0; height: 2px; background: var(--gradient); border-radius: 1px;`}></span>}
+                </a>
+              );
+            })}
+          </div>
+          <ThemeToggle />
+          <SearchBox />
+        </nav>
+
+        <!-- 手机端：菜单按钮 + 主题 + 搜索（搜索始终在右） -->
+        <div class="nav-mobile" style="display: none; align-items: center; gap: 0.5rem;">
+          <ThemeToggle />
+          <button
+            type="button"
+            id="navToggle"
+            aria-label="打开菜单"
+            aria-expanded="false"
+            aria-controls="navDrawer"
+            style="background: transparent; border: 1px solid var(--border); color: var(--text); padding: 0.4rem; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;"
+          >
+            <Icon name="menu" size={20} color="currentColor" />
+          </button>
+        </div>
+      </div>
+
+      <!-- 手机端折叠菜单抽屉 -->
+      <div
+        id="navDrawer"
+        class="nav-drawer"
+        hidden
+        style="border-top: 1px solid var(--border-soft); background: var(--bg-elev);"
+      >
+        <nav style="max-width: var(--max-w-wide); margin: 0 auto; padding: 0.8rem 1.5rem 1.2rem; display: flex; flex-direction: column; gap: 0.2rem;">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+            return (
+              <a
+                href={item.href}
+                style={`color: ${isActive ? 'var(--text)' : 'var(--text-dim)'}; font-size: 1rem; font-weight: ${isActive ? '600' : '500'}; padding: 0.7rem 0.6rem; border-radius: 8px; text-decoration: none; display: flex; align-items: center; gap: 0.5rem;`}
+                onmouseover="if(!this.style.color.includes('var(--text)')) this.style.color='var(--text)'"
+                onmouseout={`if(!${isActive}) this.style.color='var(--text-dim)'`}
+              >
+                {isActive && <span style="width: 3px; height: 16px; background: var(--gradient); border-radius: 2px;"></span>}
+                {item.label}
+              </a>
+            );
+          })}
+        </nav>
+      </div>
+    </header>
+    <main class={`main-wrap ${wide ? 'main-wide' : ''}`}>
+      <slot />
+    </main>
+    <footer style="border-top: 1px solid var(--border-soft); padding: 2rem 1.5rem; text-align: center; color: var(--text-mute); font-size: 0.85rem;">
+      <p style="margin: 0.3em 0;">© {year} 鹏飞日记 · 用 <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> 构建</p>
+      <p style="margin: 0.3em 0; font-size: 0.8em;">
+        <span style="opacity: 0.7;">写点技术，写点生活。</span>
+      </p>
+    </footer>
+  </body>
+</html>
