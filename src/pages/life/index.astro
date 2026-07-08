@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft && data.category === 'life'))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+function formatDate(d: Date) {
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}.${m}.${day}`;
+}
+---
+<BaseLayout title="生活随笔 · 鹏飞日记" description="日常、思考、复盘。" wide>
+  <header style="margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px dashed var(--border);">
+    <p style="color: var(--accent-2); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+      <Icon name="sparkle" size={12} color="var(--accent-2)" />
+      Category
+    </p>
+    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.2; margin: 0 0 0.8rem; letter-spacing: -0.02em;">
+      生活<span style="background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">随笔</span>
+    </h1>
+    <p style="color: var(--text-dim); font-size: 1.05rem; margin: 0;">共 <span style="color: var(--accent-2); font-weight: 600;">{posts.length}</span> 篇 · 日常、思考、偶尔的复盘</p>
+  </header>
+
+  {posts.length === 0 ? (
+    <p style="color: var(--text-dim); padding: 2rem 0;">还没写生活随笔呢。</p>
+  ) : (
+    <ul style="list-style: none; padding: 0; display: grid; gap: 1rem;">
+      {posts.map((post) => (
+        <li>
+          <a
+            href={`/blog/${post.id}/`}
+            style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius); padding: 1.3rem 1.5rem; transition: all var(--transition); text-decoration: none;"
+            onmouseover="this.style.borderColor='var(--accent-2)'; this.style.borderLeftColor='var(--accent-2)'; this.style.transform='translateX(4px)'; this.style.boxShadow='var(--shadow)'; this.style.background='var(--bg-card-hover)'"
+            onmouseout="this.style.borderColor='var(--border)'; this.style.borderLeftColor='var(--border)'; this.style.transform=''; this.style.boxShadow=''; this.style.background='var(--bg-card)'"
+          >
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+              <span style="font-size: 0.7rem; padding: 0.2em 0.7em; border-radius: 100px; font-weight: 600; letter-spacing: 0.05em; background: var(--accent-2-soft); color: var(--accent-2);">LIFE</span>
+              <time datetime={post.data.pubDate.toISOString()} style="color: var(--text-mute); font-size: 0.8rem; font-family: var(--font-mono);">
+                {formatDate(post.data.pubDate)}
+              </time>
+              {post.data.tags.length > 0 && (
+                <span style="color: var(--text-mute); font-size: 0.8rem;">
+                  {post.data.tags.slice(0, 3).map((t) => `#${t}`).join(' ')}
+                </span>
+              )}
+            </div>
+            <h3 style="font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700; line-height: 1.35; color: var(--text); margin: 0 0 0.4rem;">
+              {post.data.title}
+            </h3>
+            {post.data.description && (
+              <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin: 0;">
+                {post.data.description}
+              </p>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>
