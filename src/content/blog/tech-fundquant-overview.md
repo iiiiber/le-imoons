@@ -3,6 +3,7 @@ title: "FundQuant 基金量化助手 - 项目技术文档 v1.0"
 description: "13 章 13KB: 系统架构、模块设计、数据库、接口、部署、监控, FundQuant 基金量化助手的完整技术全景。"
 pubDate: 2026-04-16
 category: tech
+subcategory: "项目实战"
 tags: ["FundQuant", "基金", "量化", "架构"]
 draft: false
 ---
