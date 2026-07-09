@@ -37,10 +37,10 @@ draft: false
               ▼
 ┌─────────────────────────────────────────────────────────────┐
 │  ② 数据抓取                                                  │
-│  - POST /admin/login/index.html (MD5 密码登录, 拿 PHPSESSID)│
+│  - POST /admin/login/index.html (MD5 密码登录, 拿 session)   │
 │  - POST /admin/kylin.compatible_resource_apply/index.html   │
 │  - POST /admin/kylin.compatible/index.html                  │
-│  - 翻页 limit=100, 循环到 count/无 count 试 10 页          │
+│  - 翻页 limit=100, 循环到 count/无 count 试 10 页           │
 │  - cookie 失效兜底: 重新登录                                │
 └─────────────┬───────────────────────────────────────────────┘
               │
@@ -48,15 +48,15 @@ draft: false
               ▼                              ▼
 ┌──────────────────────────┐   ┌──────────────────────────────┐
 │  ③ 落盘                  │   │  ④ 飞书推送                  │
-│  /www/wwwroot/           │   │  chat: oc_993ff185361c1a      │
-│   tools.imoons.cn/       │   │   60814c464b1bbe8d2a         │
+│  /www/wwwroot/           │   │  chat_id 配在 .env           │
+│   tools.imoons.cn/       │   │  (ADAPT_CENTER_WEEKLY_CHAT_ID)│
 │   adapt-center/data/     │   │  - 完整周报 + 最新 20 条      │
 │   ├─ apply.json (全量)   │   │  - 本周新增/成功/未通过      │
 │   ├─ test.json (全量)    │   │  - 自动切分 (>3800 字)       │
 │   ├─ apply.slim.json     │   └──────────────────────────────┘
 │   ├─ test.slim.json      │
 │   └─ meta.json           │
-└─────────────┬─────────────┘
+└─────────────┬────────────┘
               │
               ▼
 ┌─────────────────────────────────────────────────────────────┐
@@ -70,6 +70,8 @@ draft: false
 └─────────────────────────────────────────────────────────────┘
 ```
 
+> 注：本文档示例中所有 chat_id / job_id / 凭据均以环境变量引用或脱敏替代，**不出现明文**。具体值从 `.env` / cron 平台读取。
+
 ---
 
 ## 三、关键文件清单
@@ -78,10 +80,10 @@ draft: false
 |------|------|------|
 | 抓取脚本 | `/root/.hermes/scripts/adapt_center_weekly.py` | 登录+抓取+导出+推送 4 in 1 |
 | 抓取脚本入口调用 | `python3 /root/.hermes/scripts/adapt_center_weekly.py [--dry-run]` | |
-| Web 页面 | `/www/wwwroot/tools.imoons.cn/adapt-center/index.html` | 单文件 HTML (18 KB) + 内嵌 JS |
+| Web 页面 | `/www/wwwroot/tools.imoons.cn/adapt-center/index.html` | 单文件 HTML (~22 KB) + 内嵌 JS |
 | 数据目录 | `/www/wwwroot/tools.imoons.cn/adapt-center/data/` | 全量 + 精简版 JSON |
 | 凭据配置 | `/root/.hermes/.env` → `ADAPT_CENTER_*` 字段 | |
-| Cron 任务 | `适配中心周四16点周报` · ID `2765d2f5dcd1` · `0 16 * * 4` | |
+| Cron 任务 | `适配中心周四16点周报` · 调度 `0 16 * * 4` (周四 16:00) | |
 
 ---
 
@@ -90,8 +92,8 @@ draft: false
 ### 1. 全量 + 精简 双版本数据
 
 ```
-apply.json    1.6 MB  全量 (含身份证/电话/签名/描述)
-apply.slim.json  1.2 MB  前端加载用 (脱敏)
+apply.json      1.6 MB  全量 (含身份证/电话/签名/描述)
+apply.slim.json 1.2 MB  前端加载用 (脱敏)
 ```
 
 脱敏字段：
@@ -102,7 +104,7 @@ apply.slim.json  1.2 MB  前端加载用 (脱敏)
 
 ### 2. Cookie 失效兜底
 
-CMS 后台会话 PHPSESSID 大约 30 分钟失效。脚本里:
+CMS 后台会话（PHP session cookie）大约 30 分钟失效。脚本里:
 ```python
 if resp.get('code') == 1001 or resp.get('msg') == 'not_logged':
     sessid = login_adapt_center(password)
@@ -178,24 +180,18 @@ if (cached) render(...cached, '（离线缓存）');
 
 **关键坑**: GET 直链返回"模板获取成功！"跳转页，必须带 `X-Requested-With: XMLHttpRequest` 才返回 JSON。
 
-**密码加密**: layui-extend/hashes.js 用的是 jshashes 库标准 MD5(UTF-8)，无 salt：
-```python
-import hashlib
-pwd_md5 = hashlib.md5("Kylin@123".encode()).hexdigest()
-# = a762ff413b612063f182b68534641b65
-```
+**密码加密**: layui-extend/hashes.js 用的是 jshashes 库标准 MD5(UTF-8)，无 salt。前端登录前先把密码 MD5 一次再发，后端同样 MD5 后比对。完整计算可在本地 `import hashlib; hashlib.md5(pwd.encode()).hexdigest()` 验证。
 
 ---
 
 ## 六、Cron 任务详情
 
 ```
-ID:      2765d2f5dcd1
 名称:    适配中心周四16点周报
-Schedule: 0 16 * * 4 (每周四 16:00)
+Schedule: 0 16 * * 4 (每周四 16:00, UTC+8)
 Repeat:   52 次 (约一年)
 Workdir:  /root
-Next:     2026-07-09 16:00:00 +08:00
+Next:     下个周四 16:00:00
 ```
 
 执行内容: 跑 `adapt_center_weekly.py` (抓+同步+推送 全套)。
@@ -204,11 +200,11 @@ Next:     2026-07-09 16:00:00 +08:00
 
 ## 七、运营注意事项
 
-1. **密码已泄露警告**: `Kylin@123` 在本次 IM 中贴出 + 写入 `/root/.hermes/.env`，按 USER.md 规则算"已泄露"。**强烈建议 rotate**。
-2. **Cookie 持久化**: `/tmp/adapt_cookies.txt` 存 PHPSESSID，定期清掉会强制重新登录。
+1. **凭据管理**: 所有 adapt-center 凭据从 `.env` 读（`ADAPT_CENTER_USERNAME` / `ADAPT_CENTER_PASSWORD` / `ADAPT_CENTER_WEEKLY_CHAT_ID`），不进 git、不进 wiki、不进 IM。**已贴 IM 的凭据一律按泄露处理 → 立即 rotate**。
+2. **Session 持久化**: cookie 存到 `/tmp/adapt_cookies.txt`，定期清掉会强制重新登录。
 3. **CDN 慢**: cdn.jsdelivr.net 偶尔慢，第一次打开可能 5-10s。
 4. **数据增长**: 当前全量 3.5 MB / 精简版 2.5 MB。如果未来增长到 10MB+，考虑加 `?ts=` 缓存策略 + gzip。
-5. **cron 失败排查**: 失败时会自动 DM 到飞书 home channel（oc_6b6066d3da5c3504c2881a72785e5992）。
+5. **cron 失败排查**: 失败时会自动 DM 到飞书 home channel（从 `FEISHU_HOME_CHANNEL` 读，无需硬编码）。
 
 ---
 
