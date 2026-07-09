@@ -3,6 +3,7 @@ title: "Docker 运维手册"
 description: "Ubuntu 24.04 / Docker 26 / Compose v2 / overlay2 / cgroup2fs / systemd 环境下的完整 Docker 运维速查与实战手册。"
 pubDate: 2026-06-10
 category: tech
+subcategory: "运维工具"
 tags: ["Docker", "运维", "Linux", "Ubuntu", "Compose"]
 draft: false
 ---
