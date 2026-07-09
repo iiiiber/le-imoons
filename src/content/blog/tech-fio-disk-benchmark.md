@@ -3,6 +3,7 @@ title: "Fio 磁盘性能测试指南"
 description: "从安装到实战，全面讲解 fio 测试磁盘 IOPS、吞吐量、延迟的方法，包含 NVMe / SSD / HDD 测试参数与结果解读。"
 pubDate: 2026-07-08
 category: tech
+subcategory: "运维工具"
 tags: ["fio", "Linux", "磁盘测试", "IOPS", "运维"]
 draft: false
 ---
