@@ -3,6 +3,7 @@ title: "喵极 AI (meow.yyr5.com) 技术架构深度分析"
 description: "前端代码逆向 + 公开 API 探测 + 一次真实账号实测, 完整解构 AI 表情包 SaaS 的产品/工程架构, 用于复刻学习。"
 pubDate: 2026-06-12
 category: tech
+subcategory: "项目实战"
 tags: ["AI", "SaaS", "架构", "逆向", "复刻"]
 draft: false
 ---
