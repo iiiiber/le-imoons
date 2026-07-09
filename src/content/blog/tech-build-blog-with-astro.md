@@ -3,6 +3,7 @@ title: "用 Astro 搭建个人博客"
 description: "从零开始用 Astro 7 搭建一个支持技术笔记和生活随笔分类的博客,集成 Giscus 评论,准备部署到 Cloudflare Pages。"
 pubDate: 2026-07-07
 category: tech
+subcategory: "前端全栈"
 tags: ["Astro", "博客", "静态站点"]
 ---
 
