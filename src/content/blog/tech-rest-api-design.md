@@ -3,6 +3,7 @@ title: "RESTful API 设计实战: 从入门到精通"
 description: "做后端开发这么多年, 见过太多乱七八糟的 API 设计: 把 API 当 RPC 写, URL 塞动词, 状态码抛脑后。讲讲怎么设计一个合格的 RESTful API。"
 pubDate: 2026-06-25
 category: tech
+subcategory: "前端全栈"
 tags: ["RESTful", "API", "后端", "设计"]
 draft: false
 ---
