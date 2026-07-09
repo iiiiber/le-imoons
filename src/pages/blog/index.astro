@@ -47,6 +47,11 @@ const lifeCount = posts.filter(p => p.data.category === 'life').length;
               <span style={`font-size: 0.7rem; padding: 0.2em 0.7em; border-radius: 100px; font-weight: 600; letter-spacing: 0.05em; background: ${post.data.category === 'tech' ? 'var(--accent-soft)' : 'var(--accent-2-soft)'}; color: ${post.data.category === 'tech' ? 'var(--accent)' : 'var(--accent-2)'};`}>
                 {post.data.category === 'tech' ? 'TECH' : 'LIFE'}
               </span>
+              {post.data.subcategory && (
+                <span style="font-size: 0.7rem; padding: 0.2em 0.65em; border-radius: 100px; font-weight: 500; background: var(--bg-elev); color: var(--text-dim); border: 1px solid var(--border);">
+                  {post.data.subcategory}
+                </span>
+              )}
               <time datetime={post.data.pubDate.toISOString()} style="color: var(--text-mute); font-size: 0.8rem; font-family: var(--font-mono);">
                 {formatDate(post.data.pubDate)}
               </time>
