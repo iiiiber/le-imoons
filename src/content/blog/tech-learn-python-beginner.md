@@ -3,6 +3,7 @@ title: "0 基础学 Python：一份不绕弯的学习路线图 (2026 版)"
 description: "不讲语法细节, 只回答 0 基础的人按什么顺序学、每个阶段学什么、最后能做什么。一份完整可执行的学习地图。"
 pubDate: 2026-06-10
 category: tech
+subcategory: "学习路线"
 tags: ["Python", "零基础", "学习路线", "入门"]
 draft: false
 ---
