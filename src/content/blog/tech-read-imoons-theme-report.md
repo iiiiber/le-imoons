@@ -3,6 +3,7 @@ title: "read.imoons.cn 主题调研报告: 从 wp-content/themes 目录看子主
 description: "对 read.imoons.cn 当前激活主题的结构、CSS 现状、模板层级、钩子系统做完整调研, 为后续开发'暗黑极客风'子主题做技术准备。"
 pubDate: 2026-06-09
 category: tech
+subcategory: "项目实战"
 tags: ["WordPress", "主题开发", "调研", "read.imoons.cn", "CSS"]
 draft: false
 ---
