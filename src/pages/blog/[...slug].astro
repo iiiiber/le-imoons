@@ -44,6 +44,18 @@ function formatDate(d: Date) {
 function shortTitle(t: string, max = 28) {
   return t.length > max ? t.slice(0, max) + '…' : t;
 }
+
+// 子分类转 URL hash anchor: 中文章节名 → 拼音 slug
+// 用浏览器内置 pinyin 不可行, 简化方案: 用 stable hash 8 字符
+function subcategorySlug(s: string): string {
+  // 简单 FNV-1a 32-bit hash, 转 base36
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return 'sub-' + (h >>> 0).toString(36);
+}
 ---
 <BaseLayout title={`${post.data.title} · 鹏飞日记`} description={post.data.description} wide>
   <article>
@@ -55,6 +67,17 @@ function shortTitle(t: string, max = 28) {
         >
           {post.data.category === 'tech' ? 'TECH' : 'LIFE'}
         </a>
+        {post.data.subcategory && (
+          <a
+            href={`/${post.data.category}/#${subcategorySlug(post.data.subcategory)}`}
+            title={`查看 ${post.data.category === 'tech' ? '技术' : '生活'} · ${post.data.subcategory} 分类下所有文章`}
+            style="font-size: 0.7rem; padding: 0.25em 0.8em; border-radius: 100px; font-weight: 500; letter-spacing: 0.04em; background: var(--bg-elev); color: var(--text-dim); border: 1px solid var(--border); text-decoration: none; transition: all var(--transition);"
+            onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--accent)'; this.style.background='var(--accent-soft)'"
+            onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-dim)'; this.style.background='var(--bg-elev)'"
+          >
+            {post.data.subcategory}
+          </a>
+        )}
         <time datetime={post.data.pubDate.toISOString()} style="color: var(--text-mute); font-size: 0.85rem; font-family: var(--font-mono);">
           {formatDate(post.data.pubDate)}
         </time>
