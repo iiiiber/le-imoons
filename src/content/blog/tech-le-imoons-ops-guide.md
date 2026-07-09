@@ -3,6 +3,7 @@ title: "le.imoons.cn 部署与运维指南"
 description: "从零到上线: nginx 反代 + PM2 dev mode + GitHub Actions + wrangler CF Pages 部署, Giscus 评论, SEO 三件套, 文章详情页 D 方案 TOC, 完整故障排查速查表."
 pubDate: 2026-07-09
 category: tech
+subcategory: "运维工具"
 tags: ["Astro", "nginx", "PM2", "GitHub Actions", "Cloudflare Pages", "wrangler", "Giscus", "部署", "运维"]
 draft: false
 ---
