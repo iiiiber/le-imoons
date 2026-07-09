@@ -3,6 +3,7 @@ title: "FundQuant 管理后台 - 开发文档 v2.0"
 description: "11 章 17KB: 管理后台的功能模块、数据库设计、权限系统、核心业务流程。"
 pubDate: 2026-04-13
 category: tech
+subcategory: "项目实战"
 tags: ["FundQuant", "管理后台", "权限"]
 draft: false
 ---
