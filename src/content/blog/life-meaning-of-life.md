@@ -3,6 +3,7 @@ title: "人生如何度过,才算真正精彩?"
 description: "深夜刷手机停下来想过吗: 现在的生活, 是我想要的吗? 不是朋友圈的\"精彩\", 是你自己觉得这辈子值了。3 个非标准答案。"
 pubDate: 2026-06-20
 category: life
+subcategory: "随笔思考"
 tags: ["人生", "思考", "生活", "随笔"]
 draft: false
 ---
