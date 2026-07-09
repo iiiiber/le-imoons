@@ -3,6 +3,7 @@ title: "AI 应用开发工程师知识体系与学习地图"
 description: "从 AI/ML 基础到 LLM 工程化, 一份给一线 AI 应用工程师的完整学习地图与知识图谱。"
 pubDate: 2026-07-08
 category: tech
+subcategory: "AI 笔记"
 tags: ["AI", "LLM", "工程化", "学习地图"]
 draft: false
 ---
