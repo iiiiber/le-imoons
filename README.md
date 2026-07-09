@@ -52,3 +52,5 @@ npm run preview    # 本地预览构建结果
 <!-- trigger cf-pages rebuild after secrets fix 2026-07-09 01:50 -->
 
 <!-- trigger CF Pages rebuild after CLOUDFLARE_API_TOKEN filled 2026-07-09 01:55 -->
+
+<!-- trigger 2026-07-09 02:30:00 force production alias -->
