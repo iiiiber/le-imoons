@@ -3,6 +3,7 @@ title: "博客自建运维指南"
 description: "从日常更新到问题排查，完整的博客站点运维手册，涵盖 Astro + Cloudflare Pages + Git 操作。"
 pubDate: 2026-07-08
 category: tech
+subcategory: "运维工具"
 tags: ["运维", "Cloudflare", "Git", "博客", "Astro"]
 draft: false
 ---
