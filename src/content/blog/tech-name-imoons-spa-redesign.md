@@ -3,6 +3,7 @@ title: "name.imoons.cn SPA 重构方案"
 description: "15KB 11 章: 把 10 个 10 年前的 PHP/HTML 页面重构为手机 + 桌面自适应的现代 SPA。架构设计 + 技术选型对比 + 12 周实施计划。"
 pubDate: 2026-05-20
 category: tech
+subcategory: "项目实战"
 tags: ["SPA", "重构", "name.imoons.cn", "架构"]
 draft: false
 ---
