@@ -26,10 +26,10 @@ const recentPosts = allPosts.slice(1); // 其余放列表
 
 // 6 个项目入口 (来自 about 页) — 简版带首页
 const projects = [
-  { icon: 'target',     title: 'Hermes Agent',   tag: 'AI Agent', url: 'https://hermes.imoons.cn' },
-  { icon: 'recycle',    title: '旧衣回收',        tag: '回收',      url: 'https://sujh.net' },
+  { icon: 'target',     title: 'Hermes Agent',   tag: 'AI Agent', url: 'http://hermes.imoons.cn' },
+  { icon: 'recycle',    title: '旧衣回收',        tag: '回收',      url: 'http://lm.sujh.net' },
   { icon: 'gift',       title: '灵渠圈',          tag: '礼品',      url: 'https://lingququan.imoons.cn' },
-  { icon: 'book-open',  title: '基金助手',        tag: '基金',      url: 'https://fund.imoons.cn' },
+  { icon: 'book-open',  title: '基金助手',        tag: '基金',      url: 'https://funds.imoons.cn' },
   { icon: 'pen-tool',   title: 'A 股量化',        tag: '量化',      url: 'https://quant.imoons.cn' },
   { icon: 'sparkles',   title: '月光小站',        tag: '副业',      url: 'https://moonlight.imoons.cn' },
 ];
@@ -400,12 +400,15 @@ function readingTime(text: string): number {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    min-width: 0;
   }
   .kpi {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
     flex: 1;
+    min-width: 0;
   }
   .kpi-num {
     font-family: var(--font-serif);
@@ -432,10 +435,11 @@ function readingTime(text: string): number {
   /* ====== 主内容双栏 ====== */
   .main-grid {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: minmax(0, 1fr) 280px;
     gap: 2.5rem;
     align-items: start;
   }
+  .main-grid > * { min-width: 0; }
 
   /* 左栏 */
   .section-title {
@@ -650,7 +654,7 @@ function readingTime(text: string): number {
 
   /* ====== 响应式 ====== */
   @media (max-width: 900px) {
-    .main-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .main-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
     .side-col { order: 2; }
     .featured {
       flex-direction: column-reverse;
