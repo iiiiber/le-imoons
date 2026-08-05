@@ -1,0 +1,185 @@
+---
+// 搜索框: 点击放大镜弹出 dropdown, 输入即搜, 回车跳到 /search/?q=...
+---
+<div class="search-wrap" style="position: relative;">
+  <button
+    type="button"
+    id="search-toggle"
+    aria-label="搜索"
+    style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; color: var(--text-dim); font-size: 0.95rem; line-height: 1; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;"
+    onmouseover="this.style.borderColor='var(--accent)'; this.style.color='var(--text)'"
+    onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-dim)'"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <span style="font-size: 0.78rem; opacity: 0.7; font-family: var(--font-mono);">⌘K</span>
+  </button>
+
+  <div
+    id="search-dropdown"
+    style="position: absolute; top: calc(100% + 8px); right: 0; width: 360px; max-width: calc(100vw - 2rem); background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); display: none; flex-direction: column; overflow: hidden; z-index: 100;"
+  >
+    <div style="padding: 0.8rem; border-bottom: 1px solid var(--border-soft);">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="搜文章、标签、分类..."
+        autocomplete="off"
+        style="width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.5em 0.8em; color: var(--text); font-size: 0.9rem; outline: none; font-family: inherit;"
+        onfocus="this.style.borderColor='var(--accent)'"
+        onblur="this.style.borderColor='var(--border)'"
+      />
+    </div>
+    <div
+      id="search-results"
+      style="max-height: 360px; overflow-y: auto; padding: 0.4rem;"
+    >
+      <p style="color: var(--text-mute); font-size: 0.85rem; text-align: center; padding: 1.2rem; margin: 0;">输入关键词开始搜索</p>
+    </div>
+    <div style="padding: 0.5rem 0.8rem; border-top: 1px solid var(--border-soft); color: var(--text-mute); font-size: 0.75rem; display: flex; justify-content: space-between;">
+      <span><kbd style="font-family: var(--font-mono); background: var(--bg); padding: 0.1em 0.4em; border-radius: 3px; border: 1px solid var(--border);">↵</kbd> 查看全部</span>
+      <span><kbd style="font-family: var(--font-mono); background: var(--bg); padding: 0.1em 0.4em; border-radius: 3px; border: 1px solid var(--border);">esc</kbd> 关闭</span>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    const toggle = document.getElementById('search-toggle');
+    const dropdown = document.getElementById('search-dropdown');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    if (!toggle || !dropdown || !input || !results) return;
+
+    let indexCache = null;
+
+    async function loadIndex() {
+      if (indexCache) return indexCache;
+      try {
+        const res = await fetch('/search.json');
+        indexCache = await res.json();
+        return indexCache;
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function highlight(text, query) {
+      if (!query) return text;
+      const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+      return text.replace(re, '<mark style="background: var(--accent-soft); color: var(--accent); padding: 0 0.15em; border-radius: 2px;">$1</mark>');
+    }
+
+    function score(post, terms) {
+      let s = 0;
+      const t = post.title.toLowerCase();
+      const d = (post.description || '').toLowerCase();
+      const tagStr = post.tags.join(' ').toLowerCase();
+      const ex = (post.excerpt || '').toLowerCase();
+      for (const term of terms) {
+        if (t.includes(term)) s += 10;
+        if (d.includes(term)) s += 5;
+        if (tagStr.includes(term)) s += 4;
+        if (ex.includes(term)) s += 1;
+      }
+      return s;
+    }
+
+    function renderResults(matches, query) {
+      if (!query) {
+        results.innerHTML = '<p style="color: var(--text-mute); font-size: 0.85rem; text-align: center; padding: 1.2rem; margin: 0;">输入关键词开始搜索</p>';
+        return;
+      }
+      if (matches.length === 0) {
+        results.innerHTML = '<p style="color: var(--text-dim); font-size: 0.85rem; text-align: center; padding: 1.2rem; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.4;"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>没找到相关文章</p>';
+        return;
+      }
+      results.innerHTML = matches.slice(0, 8).map((p) => {
+        const catColor = p.category === 'tech' ? 'var(--accent)' : 'var(--accent-2)';
+        const catBg = p.category === 'tech' ? 'var(--accent-soft)' : 'var(--accent-2-soft)';
+        return '<a href="' + p.url + '" style="display: block; padding: 0.7rem 0.8rem; border-radius: 6px; text-decoration: none; transition: background 0.15s;" onmouseover="this.style.background=\'var(--bg-card)\'" onmouseout="this.style.background=\'transparent\'">'
+          + '<div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.2rem;">'
+          +   '<span style="font-size: 0.65rem; padding: 0.1em 0.5em; border-radius: 100px; font-weight: 600; letter-spacing: 0.05em; background: ' + catBg + '; color: ' + catColor + ';">' + (p.category === 'tech' ? 'TECH' : 'LIFE') + '</span>'
+          +   '<span style="color: var(--text-mute); font-size: 0.75rem; font-family: var(--font-mono);">' + p.pubDate + '</span>'
+          + '</div>'
+          + '<div style="color: var(--text); font-size: 0.92rem; font-weight: 500; line-height: 1.4;">' + highlight(p.title, query) + '</div>'
+          + (p.description ? '<div style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.15rem; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">' + highlight(p.description, query) + '</div>' : '')
+          + '</a>';
+      }).join('')
+        + '<a href="/search/?q=' + encodeURIComponent(query) + '" style="display: block; padding: 0.5rem 0.8rem; text-align: center; color: var(--accent); font-size: 0.82rem; text-decoration: none; border-top: 1px solid var(--border-soft); margin-top: 0.3rem;">查看全部 ' + matches.length + ' 条结果 →</a>';
+    }
+
+    async function doSearch(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults([], '');
+        return;
+      }
+      const idx = await loadIndex();
+      const terms = q.split(/\s+/).filter(Boolean);
+      const matches = idx
+        .map((p) => ({ post: p, score: score(p, terms) }))
+        .filter((x) => x.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map((x) => x.post);
+      renderResults(matches, query.trim());
+    }
+
+    // 打开/关闭
+    function open() {
+      dropdown.style.display = 'flex';
+      setTimeout(() => input.focus(), 10);
+    }
+    function close() {
+      dropdown.style.display = 'none';
+      input.value = '';
+      renderResults([], '');
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (dropdown.style.display === 'flex') {
+        close();
+      } else {
+        open();
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      const wrap = document.querySelector('.search-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // 输入即搜
+    let timer = null;
+    input.addEventListener('input', function () {
+      clearTimeout(timer);
+      timer = setTimeout(() => doSearch(input.value), 100);
+    });
+
+    // 回车跳到 /search/?q=
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const q = input.value.trim();
+        if (q) window.location.href = '/search/?q=' + encodeURIComponent(q);
+      } else if (e.key === 'Escape') {
+        close();
+        toggle.focus();
+      }
+    });
+
+    // ⌘K / Ctrl+K 快捷键
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (dropdown.style.display === 'flex') {
+          close();
+        } else {
+          open();
+        }
+      }
+    });
+  })();
+</script>

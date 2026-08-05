@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const index = posts.map((p) => ({
+  id: p.id,
+  title: p.data.title,
+  description: p.data.description,
+  category: p.data.category,
+  tags: p.data.tags,
+  pubDate: p.data.pubDate.toISOString().slice(0, 10),
+  url: `/blog/${p.id}/`,
+  excerpt: p.body?.slice(0, 300).replace(/[#*`>\-\[\]]/g, '').trim() || '',
+}));
+---
+<BaseLayout title="搜索 · 鹏飞日记" description="搜文章、标签、分类。" wide>
+  <header style="margin-bottom: 2.5rem;">
+    <p style="color: var(--accent); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; margin: 0 0 1rem; display: flex; align-items: center; gap: 0.5rem;">
+      <Icon name="sparkle" size={14} color="var(--accent)" />
+      Search
+    </p>
+    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 700; line-height: 1.2; margin: 0 0 1.2rem; letter-spacing: -0.02em;">
+      找点<span style="background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;">东西</span>
+    </h1>
+    <input
+      id="search-page-input"
+      type="text"
+      placeholder="搜文章、标签、分类..."
+      autocomplete="off"
+      style="width: 100%; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.8em 1.1em; color: var(--text); font-size: 1rem; outline: none; font-family: inherit; transition: border-color 0.2s;"
+      onfocus="this.style.borderColor='var(--accent)'"
+      onblur="this.style.borderColor='var(--border)'"
+    />
+  </header>
+
+  <p id="search-meta" style="color: var(--text-dim); font-size: 0.9rem; margin: 0 0 1.5rem;"></p>
+  <ul id="search-page-results" style="list-style: none; padding: 0; display: grid; gap: 1rem;"></ul>
+
+  <script is:inline define:vars={{ index }}>
+    (function () {
+      const input = document.getElementById('search-page-input');
+      const results = document.getElementById('search-page-results');
+      const meta = document.getElementById('search-page-input') ? document.getElementById('search-page-input') : null;
+      const metaEl = document.getElementById('search-meta');
+      if (!input || !results || !metaEl) return;
+
+      function highlight(text, query) {
+        if (!query) return text;
+        const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        return text.replace(re, '<mark style="background: var(--accent-soft); color: var(--accent); padding: 0 0.15em; border-radius: 2px;">$1</mark>');
+      }
+
+      function score(post, terms) {
+        let s = 0;
+        const t = post.title.toLowerCase();
+        const d = (post.description || '').toLowerCase();
+        const tagStr = post.tags.join(' ').toLowerCase();
+        const ex = (post.excerpt || '').toLowerCase();
+        for (const term of terms) {
+          if (t.includes(term)) s += 10;
+          if (d.includes(term)) s += 5;
+          if (tagStr.includes(term)) s += 4;
+          if (ex.includes(term)) s += 1;
+        }
+        return s;
+      }
+
+      function doSearch(query) {
+        const q = query.trim().toLowerCase();
+        if (!q) {
+          metaEl.textContent = '共 ' + index.length + ' 篇文章，输入关键词开始搜索。';
+          results.innerHTML = '';
+          return;
+        }
+        const terms = q.split(/\s+/).filter(Boolean);
+        const matches = index
+          .map((p) => ({ post: p, score: score(p, terms) }))
+          .filter((x) => x.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .map((x) => x.post);
+
+        metaEl.innerHTML = '找到 <span style="color: var(--accent); font-weight: 600;">' + matches.length + '</span> 篇相关文章';
+
+        if (matches.length === 0) {
+          results.innerHTML = '<li style="background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-align: center; color: var(--text-dim); display: flex; flex-direction: column; align-items: center; gap: 0.6rem;"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>没找到相关文章</li>';
+          return;
+        }
+
+        results.innerHTML = matches.map((p) => {
+          const catColor = p.category === 'tech' ? 'var(--accent)' : 'var(--accent-2)';
+          const catBg = p.category === 'tech' ? 'var(--accent-soft)' : 'var(--accent-2-soft)';
+          return '<li>'
+            + '<a href="' + p.url + '" style="display: block; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: var(--radius); padding: 1.3rem 1.5rem; transition: all 0.2s; text-decoration: none;"'
+            +   ' onmouseover="this.style.borderColor=\'var(--accent)\'; this.style.borderLeftColor=\'var(--accent)\'; this.style.transform=\'translateX(4px)\'; this.style.boxShadow=\'var(--shadow)\'"'
+            +   ' onmouseout="this.style.borderColor=\'var(--border)\'; this.style.borderLeftColor=\'var(--border)\'; this.style.transform=\'\'; this.style.boxShadow=\'\'">'
+            +   '<div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">'
+            +     '<span style="font-size: 0.7rem; padding: 0.2em 0.7em; border-radius: 100px; font-weight: 600; letter-spacing: 0.05em; background: ' + catBg + '; color: ' + catColor + ';">' + (p.category === 'tech' ? 'TECH' : 'LIFE') + '</span>'
+            +     '<span style="color: var(--text-mute); font-size: 0.8rem; font-family: var(--font-mono);">' + p.pubDate + '</span>'
+            +     (p.tags.length > 0 ? '<span style="color: var(--text-mute); font-size: 0.8rem;">' + p.tags.slice(0, 3).map(function (t) { return '#' + t; }).join(' ') + '</span>' : '')
+            +   '</div>'
+            +   '<h3 style="font-family: var(--font-serif); font-size: 1.2rem; font-weight: 700; line-height: 1.35; color: var(--text); margin: 0 0 0.4rem;">' + highlight(p.title, query) + '</h3>'
+            +   (p.description ? '<p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin: 0;">' + highlight(p.description, query) + '</p>' : '')
+            + '</a></li>';
+        }).join('');
+      }
+
+      // 初始化: 从 URL 读 ?q=
+      const params = new URLSearchParams(window.location.search);
+      const initialQ = params.get('q') || '';
+      if (initialQ) {
+        input.value = initialQ;
+      }
+      doSearch(initialQ);
+
+      let timer = null;
+      input.addEventListener('input', function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          const q = input.value;
+          // 同步到 URL,不刷新页面
+          const newUrl = q ? '/search/?q=' + encodeURIComponent(q) : '/search/';
+          window.history.replaceState({}, '', newUrl);
+          doSearch(q);
+        }, 100);
+      });
+
+      // 页面加载完自动聚焦
+      if (initialQ) {
+        // 有初始查询,光标放末尾
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      } else {
+        input.focus();
+      }
+    })();
+  </script>
+</BaseLayout>

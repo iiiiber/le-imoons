@@ -1,0 +1,371 @@
+[
+  {
+    "id": "life-douyin-lingshi-vs-nv-zhuang-dai-huo",
+    "title": "抖音零食 VS 女装短视频带货：谁更容易快速出结果",
+    "description": "2026抖音电商实测数据对比，从退货率、起号难度、转化复购、佣金客单四个维度讲清零食与女装带货的真实收益差距，附分人群精准选择建议",
+    "category": "life",
+    "tags": [
+      "抖音带货",
+      "短视频带货",
+      "零食带货",
+      "女装带货",
+      "退货率",
+      "副业",
+      "抖音电商"
+    ],
+    "pubDate": "2026-08-03",
+    "url": "/blog/life-douyin-lingshi-vs-nv-zhuang-dai-huo/",
+    "excerpt": "核心一句话结论\n\n 纯新手、零货源、只求稳定出单、少售后、快速拿到佣金正向反馈：零食更容易出稳定结果；\n 有穿搭优势、能接受高退货损耗、想冲高 GMV、做长期 IP 穿搭号：女装短期爆单快，但结算后利润大幅缩水，长期容错率极低。\n\n 一、核心数据对比（2026 抖音电商实测均值）\n\n 1. 退货率（决定真实收益，差距极大）\n\n 零食：均值 4%，最高不超 10%；食品一旦签收几乎不退，无试错损耗，支付订单 ≈ 有效成交\n 女装：平价潮流款 55%80%，基础款 35%45%；支付 ROI 看着很高，退单后真实投产直接腰斩，很多时候白"
+  },
+  {
+    "id": "life-kong-fu-pao-bu-huan-bu-guo-lai",
+    "title": "久不运动、空腹突然跑步，为什么半小时都缓不过来？",
+    "description": "很多久坐人群都有过空腹跑步后心慌气短、久久缓不过劲的经历。这是久坐+空腹+高强度三重透支叠加的身体预警，不是体质差。",
+    "category": "life",
+    "tags": [
+      "运动健康",
+      "空腹跑步",
+      "心肺耐力",
+      "低血糖",
+      "新手避坑"
+    ],
+    "pubDate": "2026-08-03",
+    "url": "/blog/life-kong-fu-pao-bu-huan-bu-guo-lai/",
+    "excerpt": "引子：跑完步久久缓不过来，不是你体质差\n\n很多久坐人群都有过这样的经历：心血来潮空腹出门跑步，本想锻炼身体、改善状态，结果跑完之后心慌气短、浑身发软，半小时甚至更久都无法平复，久久缓不过劲来。\n\n这种情况并不是体质差的特例，而是身体发出的正常预警信号，是多重身体透支因素叠加导致的结果，也是新手运动最容易踩的误区。\n\n 一、三大核心原因，导致运动后久久无法恢复\n\n 1. 长期久坐，心肺功能严重\"降级\"\n\n人体的心肺耐力遵循\"用进废退\"的原则。长期缺乏运动，心脏泵血效率、肺部通气能力、全身血液循环速度都会持续下降，身体会适配久坐的低能耗状态。\n\n当突然开启跑步这种中高强度有氧运动"
+  },
+  {
+    "id": "life-tao-law-and-25d-packaging",
+    "title": "韬定律（τ 定律）与 2.5D 先进封装:后摩尔时代的另一条路",
+    "description": "华为何庭波 2026 年 5 月提出韬定律（τ 定律,τ 读作 tāo）,把芯片性能竞争从\\\"几何缩微\\\"转向\\\"时间缩微\\\"。本文通俗拆解韬定律核心定义、与摩尔定律的本质区别、2.5D/3D 先进封装如何作为落地载体,以及为什么这是后摩尔时代的关键路径。",
+    "category": "life",
+    "tags": [
+      "韬定律",
+      "摩尔定律",
+      "半导体",
+      "先进封装",
+      "2.5D",
+      "3D 封装",
+      "Chiplet",
+      "科普"
+    ],
+    "pubDate": "2026-07-31",
+    "url": "/blog/life-tao-law-and-25d-packaging/",
+    "excerpt": "韬定律（τ 定律）与 2.5D 先进封装:后摩尔时代的另一条路\n\n 一、韬（τ）定律\n\n华为何庭波 2026 年 5 月发布,官方名称是韬定律（τ 定律,τ 读作 tāo）——之前网络上有\"滔定律\"的口误,这里先订正一下。\n\n 核心定义\n\n 摩尔定律路线:几何缩微,依靠不断缩小晶体管尺寸,追求单位面积晶体管数量提升。\n 韬定律路线:时间缩微（τ 缩放）,以降低电路信号时间常数 τ（信号传输延迟）为核心目标,不再单纯追求光刻尺寸缩小。\n\n 通俗理解\n\n 摩尔定律比拼:芯片工艺几纳米,晶体管做得越小越好;\n 韬定律比拼:信号跑得有多快、互联时延"
+  },
+  {
+    "id": "tech-pinduotuzhi-ai-program",
+    "title": "拼豆图纸生成器设计：AI 出图，程序做像素化和色卡匹配",
+    "description": "一个根据上传图片生成不同风格拼豆图纸的工具，AI 负责风格化、程序负责像素化和色卡匹配，图纸底部自动给出颜色清单和豆数统计。本文记录核心设计思路：为什么不让 AI 直接画最终图纸、端到端流程、风格选项、色卡匹配算法和默认参数建议。",
+    "category": "tech",
+    "tags": [
+      "拼豆",
+      "工具",
+      "AI",
+      "Python",
+      "图像处理"
+    ],
+    "pubDate": "2026-07-21",
+    "url": "/blog/tech-pinduotuzhi-ai-program/",
+    "excerpt": "拼豆图纸生成器设计\n\n最近一直在琢磨怎么把\"上传图片 → 生成拼豆图纸\"做成一个稳定可用的流程。结论是：AI 只负责风格化，程序负责像素化和色卡匹配。两层分工各有边界，混在一起就会翻车。\n\n 为什么不让 AI 直接画最终图纸\n\n让 AI 直接出 32×32 像素图，看上去很合理，实际有三个硬伤：\n\n 格子会歪：模型对\"严格等分网格\"的偏好不够强，输出的\"格子\"大小不均，拼起来对不上底板。\n 颜色数量虚高：AI 倾向于用渐变色表达细节，一幅图给你 60 种颜色，拼到怀疑人生。\n 豆数统计不准：模型没有逐格意识，给出的\"每色 X 颗\"基本是估算，实际"
+  },
+  {
+    "id": "life-funds-system",
+    "title": "一份长期投资计划：10 万元起步、月投 1000 元、20 年达到年化 10% 收益的全攻略",
+    "description": "本金 10 万、月投 1000 元、20 年期限的长期投资规划——从 20 年复利测算到资产配置、定投执行、再平衡纪律与分阶段降风险策略,附带严格的心理与执行纪律清单",
+    "category": "life",
+    "tags": [
+      "基金",
+      "投资",
+      "复利",
+      "理财",
+      "副业"
+    ],
+    "pubDate": "2026-07-20",
+    "url": "/blog/life-funds-system/",
+    "excerpt": "本文是一份长期投资规划的完整攻略。目标很明确:目前手头 10 万元、每月可投入 1000 元、希望通过 20 年的坚持实现年化 10% 的复合收益。\n\n我会先讲清 20 年复利在不同收益率下的真实结果,然后给出一套可执行的资产配置、买入节奏与风控规则。重点会区分两件事:\n\n \"争取年化 10%\" —— 长期投资可以设目标,但市场无法承诺固定收益\n \"保证 10%\" —— 任何号称\"保本年化 10%\"的产品,要么是骗局,要么底层资产风险极高\n\n本文不会推荐任何具体基金代码或股票代码,只讲方法论和纪律。读完之后,如果你仍然决定要按这条路走下去,那大概率能在 20 年后拿到一份体"
+  },
+  {
+    "id": "life-emoji-pack-6-monetization",
+    "title": "表情包6大类完整变现模式：被动躺赚、主动接单、长期IP变现全攻略",
+    "description": "微信赞赏/付费表情、海外贴纸、定制接单、素材售卖、IP授权、自媒体变现，附2026市场报价、平台规则、接单渠道",
+    "category": "life",
+    "tags": [
+      "表情包",
+      "变现",
+      "副业",
+      "创收",
+      "微信表情",
+      "LINE贴纸",
+      "定制接单",
+      "IP授权"
+    ],
+    "pubDate": "2026-07-16",
+    "url": "/blog/life-emoji-pack-6-monetization/",
+    "excerpt": "表情包6大类完整变现模式：被动躺赚、主动接单、长期IP变现全攻略\n\n很多画师朋友私下问我，画完一套表情包到底怎么挣钱？这篇把 6 大类变现路径、报价区间、平台规则、接单渠道一次说透，按「被动躺赚→主动接单→长期 IP 变现」的进阶顺序排好，新手直接对照落地即可。\n\n\n\n 一、平台被动收益（上架后持续进钱，一次制作长期收益）\n\n 1. 微信表情包赞赏（新手首选，无门槛）\n\n规则：表情免费上架，用户自愿打赏 1/2/5/10/20/50 元，赞赏全额归创作者，平台不抽成，次日直接到微信零钱，800 元内免个税。\n\n开通条件：账号无违规、完整艺术家资料、上传引导"
+  },
+  {
+    "id": "life-old-tibet-serf-system-bone-skin-rituals",
+    "title": "旧西藏农奴制下人骨、人皮宗教器物完整历史解析",
+    "description": "历史解析 1959 年前旧西藏农奴制掠夺农奴遗骸制作人皮唐卡、人骨法器的暴行，区分与藏传佛教清净传承的差异，纪念民主改革的人权进步",
+    "category": "life",
+    "tags": [
+      "西藏",
+      "历史",
+      "农奴制",
+      "民主改革"
+    ],
+    "pubDate": "2026-07-16",
+    "url": "/blog/life-old-tibet-serf-system-bone-skin-rituals/",
+    "excerpt": "旧西藏农奴制下人骨、人皮宗教器物完整历史解析\n\n 一、核心前提：两类器物的本质区分（关键不混淆）\n\n近现代境外炒作的「人皮唐卡、人皮法器、完整人头骨碗」，全部诞生于噶厦政教合一农奴制（1959 年前旧西藏），建立在对农奴的血腥剥削、残害之上，是农奴制度野蛮残酷的直接物证。\n\n藏传佛教传统合规法器中，正规传承的人骨法器，传统戒律规定仅使用自愿往生、修行僧人或信众自愿布施的遗骨，有完整宗教仪轨与伦理约束，绝不残害活人、掠夺底层民众躯体。这与旧西藏农奴制掠夺人皮人骨的暴行有本质区别，不能混为一谈。\n\n 二、旧西藏农奴制度的底层背景（暴行产生根源）\n\n1959 年民主改革前的旧西藏，实行"
+  },
+  {
+    "id": "life-da-zhi-lao",
+    "title": "从《大只佬》看懂佛教业力流转的三层认知",
+    "description": "刘德华主演《大块头有大智慧》借三层因果认知，讲透业力不是绑定某个人的能量流",
+    "category": "life",
+    "tags": [
+      "大只佬",
+      "电影",
+      "佛教",
+      "业力",
+      "因果"
+    ],
+    "pubDate": "2026-07-10",
+    "url": "/blog/life-da-zhi-lao/",
+    "excerpt": "从《大只佬》看懂佛教业力流转的三层认知\n\n 引子：一个看似\"不公平\"的疑问\n\n看电影时很多人会有这样的困惑：恶因是别人种下的，恶果为什么会落在一个看似无辜的人身上？\n\n电影里李凤仪问刘德华：\"是不是我前世是日本兵，前世杀人，所以今生要死？\"\n\n刘德华的回答很关键：\"日本兵不是李凤仪，李凤仪不是日本兵，但日本兵杀了人，李凤仪就要承受被杀的果报。\"\n\n很多人理解不了——作恶的是日本兵，今生善良的李凤仪凭什么替别人还债？这部电影恰恰借这个情节，讲透了佛家业力最深的一层。\n\n 第一层：看见残酷真相——业力是流转的，不是绑定的\n\n很多人以为\"自己作恶自己承担、自己行善自己享福\"是因"
+  },
+  {
+    "id": "tech-le-imoons-ops-guide",
+    "title": "le.imoons.cn 部署与运维指南",
+    "description": "从零到上线: nginx 反代 + PM2 dev mode + GitHub Actions + wrangler CF Pages 部署, Giscus 评论, SEO 三件套, 文章详情页 D 方案 TOC, 完整故障排查速查表.",
+    "category": "tech",
+    "tags": [
+      "Astro",
+      "nginx",
+      "PM2",
+      "GitHub Actions",
+      "Cloudflare Pages",
+      "wrangler",
+      "Giscus",
+      "部署",
+      "运维"
+    ],
+    "pubDate": "2026-07-09",
+    "url": "/blog/tech-le-imoons-ops-guide/",
+    "excerpt": "le.imoons.cn 部署与运维指南\n\n 0. 项目速览\n\n| 字段 | 值 |\n|||\n| 主域名 | le.imoons.cn (本地 + 本地 nginx) |\n| 静态域名 | https://blog.leeeo.cn (CF Pages + 自定义域) |\n| 备用默认 | https://blogimoons.pages.dev |\n| 源码根 | /www/wwwroot/le.imoons.cn/ |\n| 文章目录 | src/content/blog/ (14 篇) |\n| 框架 | Astro 7.0.6 + content"
+  },
+  {
+    "id": "tech-adapt-center-dashboard",
+    "title": "适配中心 数据看板 搭建全记录",
+    "description": "把 adapt-center.com 后台 903 条适配申请 + 1000 条测试申请，做成数据看板部署到 tools.imoons.cn/adapt-center/。含抓取脚本、cron 周四 16:00 自动同步、飞书推送、CMS 后台探索路径、字段去重、离线缓存等关键设计。",
+    "category": "tech",
+    "tags": [
+      "工具搭建",
+      "数据看板",
+      "飞书",
+      "Cron",
+      "ECharts",
+      "CMS"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-adapt-center-dashboard/",
+    "excerpt": "适配中心 数据看板 搭建全记录\n\n日期：20260708\n站点：tools.imoons.cn/adaptcenter/\n作者：不二（AI 助手）\n\n\n\n 一、需求\n\n把\"湖南省计算产业生态创新中心\"后台 (adaptcenter.com) 的两类申请数据：\n 适配申请（compatible_resource_apply）：903 条\n 测试申请（compatible）：1000 条\n\n做成一个数据看板页面，部署到 tools.imoons.cn 子目录，并支持每周四 16:00 自动同步数据 + 飞书推送。"
+  },
+  {
+    "id": "tech-ai-app-engineer-knowledge-map",
+    "title": "AI 应用开发工程师知识体系与学习地图",
+    "description": "从 AI/ML 基础到 LLM 工程化, 一份给一线 AI 应用工程师的完整学习地图与知识图谱。",
+    "category": "tech",
+    "tags": [
+      "AI",
+      "LLM",
+      "工程化",
+      "学习地图"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-ai-app-engineer-knowledge-map/",
+    "excerpt": "AI 应用开发工程师知识体系与学习地图\n\n 背景\n\nAI 应用开发工程师（AI Application Engineer）这个角色介于传统后端 / 前端工程师和算法工程师之间——你不需要从零训练大模型，但要能基于 LLM 做出能在生产环境跑得动的产品。\n\n过去三年（20232026），随着 LangChain / LlamaIndex / vLLM / MCP / Agent 框架爆发，这个岗位的招聘需求和薪资天花板都在快速抬升。但知识体系是散的——算法工程师只教原理，后端工程师只教工程，没有一份从「我要入门」到「我能独立交付 AI 产品」的完整地图。\n\n这篇文章把"
+  },
+  {
+    "id": "tech-blog-ops-guide",
+    "title": "博客自建运维指南",
+    "description": "从日常更新到问题排查，完整的博客站点运维手册，涵盖 Astro + Cloudflare Pages + Git 操作。",
+    "category": "tech",
+    "tags": [
+      "运维",
+      "Cloudflare",
+      "Git",
+      "博客",
+      "Astro"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-blog-ops-guide/",
+    "excerpt": "博客自建运维指南\n\n 适用环境：Linux / Node.js ≥ 22 / Astro 7 / Cloudflare Pages\n 编写日期：20260708\n 适用场景：个人博客日常维护、内容更新、问题排查\n\n\n\n 一、日常更新流程\n\n 1. 写文章\n\n在 src/content/blog/ 下新建 .md 文件：\n\nbash\ncd /workspace\ntouch src/content/blog/technewpost.md\n\n\n文章 frontmatter 格式：\n\nyaml\n\ntitle: \"文章标题\"\ndescr"
+  },
+  {
+    "id": "tech-fio-disk-benchmark",
+    "title": "Fio 磁盘性能测试指南",
+    "description": "从安装到实战，全面讲解 fio 测试磁盘 IOPS、吞吐量、延迟的方法，包含 NVMe / SSD / HDD 测试参数与结果解读。",
+    "category": "tech",
+    "tags": [
+      "fio",
+      "Linux",
+      "磁盘测试",
+      "IOPS",
+      "运维"
+    ],
+    "pubDate": "2026-07-08",
+    "url": "/blog/tech-fio-disk-benchmark/",
+    "excerpt": "Fio 磁盘性能测试指南\n\n 适用环境：Linux (Ubuntu / CentOS / Debian) / fio 3.x\n 编写日期：20260708\n 适用场景：SSD / NVMe / HDD 性能评估、云盘选型、存储压测\n\n\n\n 0. 为什么用 fio\n\nfio (Flexible I/O Tester) 是业界标准的磁盘性能测试工具，原因：\n\n 灵活：支持十几种引擎，参数可任意组合\n 准确：直接调用 libaio / io_uring，绕过缓存干扰\n 通用：Linux / Windows / macOS 全平台\n 权威"
+  },
+  {
+    "id": "tech-build-blog-with-astro",
+    "title": "用 Astro 搭建个人博客",
+    "description": "从零开始用 Astro 7 搭建一个支持技术笔记和生活随笔分类的博客,集成 Giscus 评论,准备部署到 Cloudflare Pages。",
+    "category": "tech",
+    "tags": [
+      "Astro",
+      "博客",
+      "静态站点"
+    ],
+    "pubDate": "2026-07-07",
+    "url": "/blog/tech-build-blog-with-astro/",
+    "excerpt": "为什么选 Astro\n\nAstro 的核心卖点是 \"默认零 JS\"——生成的页面在浏览器不跑任何 JS（除非显式加 client: 指令）。对于内容为主的博客来说，这正好契合：\n\n 加载快（首屏只有 HTML + CSS）\n SEO 友好\n 部署简单（产出纯静态文件）\n\n 核心结构\n\n\nsrc/\n  content.config.ts      内容集合定义\n  content/blog/          所有 .md 文章\n  layouts/               共享布局\n  components/            复用组件"
+  },
+  {
+    "id": "tech-rest-api-design",
+    "title": "RESTful API 设计实战: 从入门到精通",
+    "description": "做后端开发这么多年, 见过太多乱七八糟的 API 设计: 把 API 当 RPC 写, URL 塞动词, 状态码抛脑后。讲讲怎么设计一个合格的 RESTful API。",
+    "category": "tech",
+    "tags": [
+      "RESTful",
+      "API",
+      "后端",
+      "设计"
+    ],
+    "pubDate": "2026-06-25",
+    "url": "/blog/tech-rest-api-design/",
+    "excerpt": "RESTful API 设计实战：从入门到精通\n\n做后端开发这么多年，我见过太多乱七八糟的 API 设计。有人把 API 当作 RPC 来写，一个接口既查又改；有人 URL 里塞满了动词，/getUserInfo、/deleteUserById；还有人把 HTTP 状态码抛在脑后，返回 200 实际是错误。\n\n今天聊聊怎么设计一个合格的 RESTful API。\n\n 什么是 REST\n\nREST（Representational State Transfer）本质上是一套设计 Web API 的指导思想。核心就三点：\n\n1. 资源优先：URL 描述的是\"什么东"
+  },
+  {
+    "id": "life-meaning-of-life",
+    "title": "人生如何度过,才算真正精彩?",
+    "description": "深夜刷手机停下来想过吗: 现在的生活, 是我想要的吗? 不是朋友圈的\\\"精彩\\\", 是你自己觉得这辈子值了。3 个非标准答案。",
+    "category": "life",
+    "tags": [
+      "人生",
+      "思考",
+      "生活",
+      "随笔"
+    ],
+    "pubDate": "2026-06-20",
+    "url": "/blog/life-meaning-of-life/",
+    "excerpt": "人生如何度过，才算真正精彩？\n\n深夜刷手机的时候，你有没有那么一瞬间停下来想过：现在的生活，是我想要的吗？\n\n不是朋友圈里精心修饰的那种\"精彩\"，不是别人眼中的成功，而是你自己真正觉得——这辈子，值了。\n\n这个问题没有标准答案，但有些东西，踩过坑的人才知道。\n\n 01 别等\"准备好了\"才开始\n\n太多人死在等待里。\n\n想转行，说等攒够钱再说。想创业，说等市场成熟。想追那个人，说等自己变得更好。结果呢？钱没攒够，市场没成熟，自己也没变好，时间倒是等没了。\n\n人生不是做菜，没必要等所有配料都齐了才下锅。\n\n我一个朋友，35 岁那年突然想学潜水。家里人都说这个年纪了折腾什么。她没理，"
+  },
+  {
+    "id": "life-durian-evolution",
+    "title": "榴莲为什么进化成\\\"臭得要命、剥得要死\\\"的样子?",
+    "description": "走进水果店, 闻到生化武器般的味道, 但舀一勺奶油般的果肉,一切都释然了。从生物进化角度拆解榴莲的\\\"招商大会\\\"、硬壳保鲜设计和与人类的共生史。",
+    "category": "life",
+    "tags": [
+      "生物",
+      "进化",
+      "科普",
+      "榴莲"
+    ],
+    "pubDate": "2026-06-15",
+    "url": "/blog/life-durian-evolution/",
+    "excerpt": "榴莲为什么进化成\"臭得要命、剥得要死\"的样子？\n\n你有没有这样的经历——走进水果店，闻到一股\"生化武器\"般的味道，第一反应是捂住鼻子往后退。\n\n但等你剥开那颗榴莲，舀一勺奶油般的果肉放进嘴里，一切都释然了。\n\n榴莲就是这么一种神奇的存在：闻起来像厕所，吃起来像天堂。\n\n那问题来了——它为什么要进化成这副\"欠揍\"的样子？\n\n 01 榴莲的臭，是一场精心策划的\"招商大会\"\n\n很多人不知道的是：榴莲的臭味，是专门给动物\"设计\"的。\n\n榴莲的祖先在东南亚热带雨林里遇到了一个难题——我的种子太大了，怎么传播？\n\n树太高、风太弱，靠风力传播种子？行不通。靠自己掉落砸出方圆几米？也"
+  },
+  {
+    "id": "tech-docker-ops",
+    "title": "Docker 运维手册",
+    "description": "Ubuntu 24.04 / Docker 26 / Compose v2 / overlay2 / cgroup2fs / systemd 环境下的完整 Docker 运维速查与实战手册。",
+    "category": "tech",
+    "tags": [
+      "Docker",
+      "运维",
+      "Linux",
+      "Ubuntu",
+      "Compose"
+    ],
+    "pubDate": "2026-06-10",
+    "url": "/blog/tech-docker-ops/",
+    "excerpt": "Docker 运维手册\n\n 适用环境：Ubuntu 24.04 LTS / Docker 26.1.4 / Compose v2.28.1 / overlay2 / cgroup2fs / systemd\n 编写日期：20260610\n 适用服务器：124.223.155.35 (VM05ubuntu) 及同架构 CVM\n 维护：本机权威源，修改后同步飞书文档\n\n\n\n 0. 环境速查\n\nbash\n 一行总览\ndocker version format '{{.Server.Version}} | {{.Client.Version}}' 2&1"
+  },
+  {
+    "id": "tech-learn-python-beginner",
+    "title": "0 基础学 Python：一份不绕弯的学习路线图 (2026 版)",
+    "description": "不讲语法细节, 只回答 0 基础的人按什么顺序学、每个阶段学什么、最后能做什么。一份完整可执行的学习地图。",
+    "category": "tech",
+    "tags": [
+      "Python",
+      "零基础",
+      "学习路线",
+      "入门"
+    ],
+    "pubDate": "2026-06-10",
+    "url": "/blog/tech-learn-python-beginner/",
+    "excerpt": "0 基础学 Python：一份不绕弯的学习路线图（2026 版）\n\n 这篇文章不讲语法细节，只回答一个问题：0 基础的人，按什么顺序学、每个阶段学什么、最后能做什么。全文 4500 字，看完你会有一个清晰的地图。\n\n\n\n 为什么要学 Python\n\nPython 不是\"最完美的语言\"，但对 0 基础的人来说，它是最不挡路的语言。\n\n几个事实：\n\n 语法接近自然英语（if x  0: 读起来就是\"如果 x 大于 0\"）\n 装好解释器后第一行代码就能跑（print(\"hello\") 一秒出结果）\n 库生态丰富：爬虫、自动化、数据分析、AI、网页后端"
+  },
+  {
+    "id": "tech-read-imoons-theme-report",
+    "title": "read.imoons.cn 主题调研报告: 从 wp-content/themes 目录看子主题开发机会",
+    "description": "对 read.imoons.cn 当前激活主题的结构、CSS 现状、模板层级、钩子系统做完整调研, 为后续开发'暗黑极客风'子主题做技术准备。",
+    "category": "tech",
+    "tags": [
+      "WordPress",
+      "主题开发",
+      "调研",
+      "read.imoons.cn",
+      "CSS"
+    ],
+    "pubDate": "2026-06-09",
+    "url": "/blog/tech-read-imoons-theme-report/",
+    "excerpt": "read.imoons.cn 主题调研报告\n日期: 20260609\n调研人: Hermes Agent (subagent)\n目标: 为后续开发「暗黑极客风」子主题做准备\n操作: 仅调研，未改动任何文件\n\n\n\n ⚠️ 关键发现（先看这个）\n\n1. 当前激活的主题不是 imoonsfuture，而是 imoonsfuture.bak20260608152439（一个 .bak 后缀的目录）。wp option get template/stylesheet 都返回这个 bak 目录。\n2. 两个目录的 sty"
+  },
+  {
+    "id": "tech-name-imoons-spa-redesign",
+    "title": "name.imoons.cn SPA 重构方案",
+    "description": "15KB 11 章: 把 10 个 10 年前的 PHP/HTML 页面重构为手机 + 桌面自适应的现代 SPA。架构设计 + 技术选型对比 + 12 周实施计划。",
+    "category": "tech",
+    "tags": [
+      "SPA",
+      "重构",
+      "name.imoons.cn",
+      "架构"
+    ],
+    "pubDate": "2026-05-20",
+    "url": "/blog/tech-name-imoons-spa-redesign/",
+    "excerpt": "name.imoons.cn SPA 重构方案\n\n 一、项目目标\n\n将 name.imoons.cn 现有的 10 个 PHP/HTML 页面（10 年前的样式）重构为一个手机 + 桌面自适应的现代 SPA。前端技术栈对齐已经在 n.imoons.cn 跑起来的 bazinamer 项目（Vite + React 18 + React Router v6 + Tailwind 3）。后端保留现有 PHP（MySQL + 6tail/lunarphp + MiniMax M3 AI），改造为纯 JSON API 给前端调用。\n\n成果衡量标准：手机（375px）/ 平板（768px）"
+  },
+  {
+    "id": "tech-fundquant-overview",
+    "title": "FundQuant 基金量化助手 - 项目技术文档 v1.0",
+    "description": "13 章 13KB: 系统架构、模块设计、数据库、接口、部署、监控, FundQuant 基金量化助手的完整技术全景。",
+    "category": "tech",
+    "tags": [
+      "FundQuant",
+      "基金",
+      "量化",
+      "架构"
+    ],
+    "pubDate": "2026-04-16",
+    "url": "/blog/tech-fundquant-overview/",
+    "excerpt": "FundQuant 基金量化助手  项目技术文档\n\n 文档版本: v1.0  \n 生成日期: 20260416  \n 维护状态: 活跃开发中\n\n\n\n 目录\n\n1. 项目概述(1项目概述)\n2. 系统架构(2系统架构)\n3. 部署环境(3部署环境)\n4. 项目结构(4项目结构)\n5. 数据库设计(5数据库设计)\n6. 前端功能(6前端功能)\n7. 后端API(7后端api)\n8. 核心模块(8核心模块)\n9. 第三方服务(9第三方服务)\n10. 运维指南(10运维指"
+  },
+  {
+    "id": "tech-fundquant-admin",
+    "title": "FundQuant 管理后台 - 开发文档 v2.0",
+    "description": "11 章 17KB: 管理后台的功能模块、数据库设计、权限系统、核心业务流程。",
+    "category": "tech",
+    "tags": [
+      "FundQuant",
+      "管理后台",
+      "权限"
+    ],
+    "pubDate": "2026-04-13",
+    "url": "/blog/tech-fundquant-admin/",
+    "excerpt": "FundQuant 管理后台系统  开发文档\n\n版本: v2.0\n日期: 20260413\n状态: 待确认\n\n\n\n 1. 项目概述\n\n 1.1 背景\nFundQuant 基金量化助手现有前端面向用户展示，当前端功能已完善。现需要开发独立的管理后台系统，用于运维管理。\n\n 1.2 目标\n为 FundQuant 开发独立的管理后台系统，实现持仓管理、AI模型配置、第三方API管理等功能。\n\n 1.3 数据库配置\n\n| 配置项 | 值 |\n|||\n| 数据库 | funds |\n| 用户名 | funds |\n|"
+  }
+]

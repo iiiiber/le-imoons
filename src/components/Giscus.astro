@@ -1,0 +1,128 @@
+---
+// Giscus 评论组件 - 通过环境变量配置
+// 启用前需要在 https://giscus.app/zh-CN 配置仓库,获取以下参数
+import Icon from './Icon.astro';
+
+const enabled = !!import.meta.env.PUBLIC_GISCUS_REPO;
+const repo = import.meta.env.PUBLIC_GISCUS_REPO || '';
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID || '';
+const category = import.meta.env.PUBLIC_GISCUS_CATEGORY || 'General';
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID || '';
+
+// 主题映射：跟随站内 3 主题 × 3 主色 = 9 套
+// data-theme 名必须用 giscus 支持的官方名（giscus.app/zh-CN 主题下拉里那批）
+const themeMap: Record<string, string> = {
+  'dark_blue':   'dark',
+  'light_blue':  'light',
+  'dark_purple': 'dark_dimmed',
+  'light_purple':'light',
+  'dark_green':  'noborder_dark',
+  'light_green': 'noborder_light',
+};
+---
+
+{enabled && (
+  <section
+    class="giscus-section"
+    data-repo={repo}
+    data-repo-id={repoId}
+    data-category={category}
+    data-category-id={categoryId}
+    style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);"
+  >
+    <h2 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem;">
+      <Icon name="message-circle" size={20} color="var(--text)" />
+      评论
+    </h2>
+    <div id="giscus-host" style="min-height: 200px;">
+      <!-- 加载占位 -->
+      <div class="giscus-loading" style="padding: 1.5rem; color: var(--text-dim); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem;">
+        <Icon name="loader" size={16} color="var(--text-dim)" />
+        评论加载中…
+      </div>
+    </div>
+  </section>
+)}
+
+{!enabled && (
+  <section style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); color: var(--text-dim); font-size: 0.9rem;">
+    <h2 style="margin-top: 0; display: flex; align-items: center; gap: 0.5rem; color: var(--text); font-size: 1.3rem;">
+      <Icon name="message-circle" size={20} color="var(--text)" />
+      评论
+    </h2>
+    <p style="margin: 0 0 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+      <Icon name="info" size={14} color="var(--text-dim)" />
+      评论功能未启用。在 <code>.env</code> 中配置 4 个 <code>PUBLIC_GISCUS_*</code> 变量即可启用。
+    </p>
+    <details style="margin-top: 0.6rem;">
+      <summary style="cursor: pointer; color: var(--accent); font-size: 0.85rem; user-select: none;">📋 30 秒开通步骤</summary>
+      <ol style="margin: 0.8rem 0 0; padding-left: 1.4rem; line-height: 1.7; font-size: 0.85rem; color: var(--text-dim);">
+        <li>打开 <a href="https://github.com/apps/giscus" target="_blank" rel="noopener" style="color: var(--accent);">github.com/apps/giscus</a> → Install → 选 <code>iiiiber/blog-comments</code></li>
+        <li>打开 <a href="https://giscus.app/zh-CN" target="_blank" rel="noopener" style="color: var(--accent);">giscus.app/zh-CN</a></li>
+        <li>仓库填 <code>iiiiber/blog-comments</code>，页面分类选 <code>General</code></li>
+        <li>把页面生成的 <code>data-repo</code>、<code>data-repo-id</code>、<code>data-category</code>、<code>data-category-id</code> 4 个值填到 <code>.env</code></li>
+        <li>重启 <code>npm run dev</code>，评论区自动出现</li>
+      </ol>
+    </details>
+  </section>
+)}
+
+{enabled && (
+  <script is:inline define:vars={{ repo, repoId, category, categoryId, themeMap }}>
+    (function () {
+      const HOST = document.getElementById('giscus-host');
+      if (!HOST) return;
+
+      const LANG = 'zh-CN';
+      const MAPPING = 'pathname';
+      const STRICT = '0';
+      const REACTIONS = '1';
+      const INPUT_POS = 'top';
+      const LOADING = 'lazy';
+
+      function getCurrentTheme() {
+        const t = document.documentElement.getAttribute('data-theme') || 'dark';
+        const a = document.documentElement.getAttribute('data-accent') || 'blue';
+        return (themeMap[t + '_' + a]) || 'dark';
+      }
+
+      function injectGiscus(theme) {
+        HOST.innerHTML = '';
+        const s = document.createElement('script');
+        s.src = 'https://giscus.app/client.js';
+        s.setAttribute('data-repo', repo);
+        s.setAttribute('data-repo-id', repoId);
+        s.setAttribute('data-category', category);
+        s.setAttribute('data-category-id', categoryId);
+        s.setAttribute('data-mapping', MAPPING);
+        s.setAttribute('data-strict', STRICT);
+        s.setAttribute('data-reactions-enabled', REACTIONS);
+        s.setAttribute('data-emit-metadata', '0');
+        s.setAttribute('data-input-position', INPUT_POS);
+        s.setAttribute('data-theme', theme);
+        s.setAttribute('data-lang', LANG);
+        s.setAttribute('data-loading', LOADING);
+        s.setAttribute('crossorigin', 'anonymous');
+        s.async = true;
+        HOST.appendChild(s);
+      }
+
+      // 首次注入
+      injectGiscus(getCurrentTheme());
+
+      // 主题/主色切换 → 实时推送
+      const observer = new MutationObserver(() => {
+        const frame = document.querySelector('iframe.giscus-frame');
+        if (!frame) return;
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: getCurrentTheme() } } },
+          'https://giscus.app'
+        );
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme', 'data-accent'],
+      });
+    })();
+  </script>
+)}
