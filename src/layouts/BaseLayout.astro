@@ -130,7 +130,7 @@ const year = new Date().getFullYear();
       .main-wide {
         max-width: var(--max-w-wide);
       }
-      /* ========== 主色板(3 选 1) ========== */
+      /* ========== 主色板(7 选 1) ========== */
       [data-accent="blue"] {
         --accent: #60a5fa;
         --accent-soft: rgba(96, 165, 250, 0.15);
@@ -151,6 +151,34 @@ const year = new Date().getFullYear();
         --accent-2: #fbbf24;
         --accent-2-soft: rgba(251, 191, 36, 0.15);
         --gradient: linear-gradient(135deg, #4ade80 0%, #6ee7b7 50%, #fbbf24 100%);
+      }
+      [data-accent="red"] {
+        --accent: #f87171;
+        --accent-soft: rgba(248, 113, 113, 0.15);
+        --accent-2: #fca5a5;
+        --accent-2-soft: rgba(252, 165, 165, 0.15);
+        --gradient: linear-gradient(135deg, #f87171 0%, #fca5a5 50%, #fb923c 100%);
+      }
+      [data-accent="orange"] {
+        --accent: #fb923c;
+        --accent-soft: rgba(251, 146, 60, 0.15);
+        --accent-2: #fdba74;
+        --accent-2-soft: rgba(253, 186, 116, 0.15);
+        --gradient: linear-gradient(135deg, #fb923c 0%, #fdba74 50%, #f87171 100%);
+      }
+      [data-accent="pink"] {
+        --accent: #f472b6;
+        --accent-soft: rgba(244, 114, 182, 0.15);
+        --accent-2: #f9a8d4;
+        --accent-2-soft: rgba(249, 168, 212, 0.15);
+        --gradient: linear-gradient(135deg, #f472b6 0%, #f9a8d4 50%, #a78bfa 100%);
+      }
+      [data-accent="cyan"] {
+        --accent: #22d3ee;
+        --accent-soft: rgba(34, 211, 238, 0.15);
+        --accent-2: #67e8f9;
+        --accent-2-soft: rgba(103, 232, 249, 0.15);
+        --gradient: linear-gradient(135deg, #22d3ee 0%, #67e8f9 50%, #6ee7b7 100%);
       }
 
       /* ========== 暗色主题 ========== */
