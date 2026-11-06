@@ -45,7 +45,7 @@ draft: false
 
 ## 1. 达梦 DM8 是什么
 
-达梦数据库（DM，Dream Multimedia？不，Dream Machine 的 DM）是国产关系型数据库，语法风格接近 Oracle，也兼容不少 MySQL / PostgreSQL 场景。它常用于信创、政企、金融等对国产化有要求的系统里。
+达梦数据库（DM）是国产关系型数据库，语法风格接近 Oracle，也兼容不少 MySQL / PostgreSQL 场景。它常用于信创、政企、金融等对国产化有要求的系统里。
 
 DM8 是当前常见的稳定版本，支持：
 
