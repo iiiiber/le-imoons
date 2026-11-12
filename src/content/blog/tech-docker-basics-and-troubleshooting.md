@@ -253,7 +253,49 @@ ps -ef | grep -iE "dmserver|dmap|dmwatch"
 
 查到进程后，进程命令行一般带安装路径（如 `/opt/dmdbms/bin/dmserver`），顺着就能找到实例和数据目录。
 
-### 5.4 主机和 Docker 都查不到怎么办
+### 5.4 查达梦数据库版本
+
+查版本有两条路：**连库查询**（最准）和**不连库看安装痕迹**。
+
+连库查询（disql）：
+
+```sql
+-- 完整版本信息，含 build 号
+SELECT * FROM v$version;
+
+-- 实例信息里也有服务器版本
+SELECT server_version, instance_name, status$ FROM v$instance;
+```
+
+不连库，从主机上判断：
+
+```bash
+# 1. 安装包版本（rpm 安装才有效）
+rpm -qa | grep -iE "dameng|dm8"
+
+# 2. 服务状态和启动路径
+systemctl status dmserver
+
+# 3. 进程命令行：能看到安装目录和数据目录
+ps -ef | grep dmserver
+
+# 4. 实例运行日志：数据目录下 dm_<实例名>_<日期>.log，启动第一行是版本 banner
+grep -i "DM Database Server" /data/dmdata/DAMENG/dm_DAMENG_*.log | head -1
+
+# 5. 建库日志：dminit 日志开头就是建库时的版本
+head -30 /data/dmdata/DAMENG/dminit20260921151050.log
+```
+
+**实战判断**：看到进程 `dmserver path=/data/dmdata/DAMENG/dm.ini -noconsole`，直接能读出：
+
+- 安装目录：`/data/dmdbms`（bin 所在的上一级）
+- 数据目录：`/data/dmdata/DAMENG`
+- 实例名：`DAMENG`（dm.ini 所在目录名）
+- 运行用户：`dmdba`
+
+版本号格式 `V8.1.x.x`：中间的 1 是大版本，后面是补丁号，对照官方发版说明可确认基线版本。
+
+### 5.5 主机和 Docker 都查不到怎么办
 
 说明达梦不在这台机器上，也别慌，按优先级继续：
 
